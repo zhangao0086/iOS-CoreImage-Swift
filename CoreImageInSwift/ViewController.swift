@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
+    lazy var originalImage: UIImage = {
+        return UIImage(named: "Image")
+    }()
                             
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +21,7 @@ class ViewController: UIViewController {
         self.imageView.layer.shadowColor = UIColor.blackColor().CGColor
         self.imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
         
-        self.imageView.image = UIImage(named: "Image")
+        self.imageView.image = originalImage
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,13 +31,20 @@ class ViewController: UIViewController {
 
      // MARK: - 怀旧效果
     @IBAction func sepiaTone() {
-        let inputImage = CIImage(image: self.imageView.image)
+        let inputImage = CIImage(image: originalImage)
         let sepiaToneFilter = CIFilter(name: "CISepiaTone")
         sepiaToneFilter.setValue(inputImage, forKey: kCIInputImageKey)
         sepiaToneFilter.setValue(0.5, forKey: kCIInputIntensityKey)
         
         let outputImage =  sepiaToneFilter.outputImage
-        self.imageView.image = UIImage(CIImage: outputImage)
+        //ContentMode属性需要根据CGImage来调整
+        let cg = CIContext(options: nil).createCGImage(outputImage, fromRect: outputImage.extent())
+//        self.imageView.image = UIImage(CIImage: outputImage)
+        self.imageView.image = UIImage(CGImage: cg)
+    }
+    
+    @IBAction func showOriginalImage() {
+        self.imageView.image = originalImage
     }
 }
 
