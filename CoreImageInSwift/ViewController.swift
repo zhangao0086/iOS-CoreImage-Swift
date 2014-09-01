@@ -26,6 +26,15 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+     // MARK: - 怀旧效果
+    @IBAction func sepiaTone() {
+        let inputImage = CIImage(image: self.imageView.image)
+        let sepiaToneFilter = CIFilter(name: "CISepiaTone")
+        sepiaToneFilter.setValue(inputImage, forKey: kCIInputImageKey)
+        sepiaToneFilter.setValue(0.5, forKey: kCIInputIntensityKey)
+        
+        let outputImage =  sepiaToneFilter.outputImage
+        self.imageView.image = UIImage(CIImage: outputImage)
+    }
 }
 
