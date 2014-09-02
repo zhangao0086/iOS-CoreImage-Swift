@@ -10,12 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
-    @IBOutlet var intensitySlider: UISlider!
     
     lazy var originalImage: UIImage = {
         return UIImage(named: "Image")
     }()
     
+    @IBOutlet var intensitySlider: UISlider!
     var filter: CIFilter!
     lazy var context: CIContext = {
         return CIContext(options: nil)
@@ -49,6 +49,7 @@ class ViewController: UIViewController {
     }
     
     // MARK: -
+    
     @IBAction func onValueChanged() {
         filter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
         let outputImage =  filter.outputImage
@@ -66,6 +67,18 @@ class ViewController: UIViewController {
         //ContentMode属性需要根据CGImage来调整
         let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
 //        self.imageView.image = UIImage(CIImage: outputImage)
+        self.imageView.image = UIImage(CGImage: cgImage)
+    }
+    
+    // MARK: - 自动改善
+    @IBAction func autoAdjust() {
+        var inputImage = CIImage(image: originalImage)
+        let filters = inputImage.autoAdjustmentFilters() as [CIFilter]
+        for filter: CIFilter in filters {
+            filter.setValue(inputImage, forKey: kCIInputImageKey)
+            inputImage = filter.outputImage
+        }
+        let cgImage = context.createCGImage(inputImage, fromRect: inputImage.extent())
         self.imageView.image = UIImage(CGImage: cgImage)
     }
     
@@ -135,11 +148,6 @@ class ViewController: UIViewController {
         let inputImage = CIImage(image: originalImage)
         filter = CIFilter(name: "CIPhotoEffectChrome")
         filter.setValue(inputImage, forKey: kCIInputImageKey)
-        outputImage()
-    }
-    
-    @IBAction func test() {
-//        minimumComponent()
         outputImage()
     }
 }

@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeD-pL-iF9">
-                                <rect key="frame" x="35" y="28" width="250" height="320"/>
+                                <rect key="frame" x="35" y="25" width="250" height="320"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="95F-bu-C9y">
-                                <rect key="frame" x="16" y="383" width="46" height="30"/>
+                                <rect key="frame" x="16" y="377" width="46" height="30"/>
                                 <state key="normal" title="怀旧">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -29,13 +29,13 @@
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="9HJ-tp-4ci">
-                                <rect key="frame" x="68" y="427" width="238" height="31"/>
+                                <rect key="frame" x="68" y="416" width="238" height="31"/>
                                 <connections>
                                     <action selector="onValueChanged" destination="vXZ-lx-hvc" eventType="valueChanged" id="pLJ-YK-tHl"/>
                                 </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Nm-8t-T1g">
-                                <rect key="frame" x="197" y="383" width="46" height="30"/>
+                                <rect key="frame" x="258" y="377" width="46" height="30"/>
                                 <state key="normal" title="黑白">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -44,22 +44,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="强度:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0K-6D-nwO">
-                                <rect key="frame" x="16" y="431" width="46" height="21"/>
+                                <rect key="frame" x="16" y="420" width="46" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0F2-b0-7FO">
-                                <rect key="frame" x="258" y="518" width="46" height="30"/>
-                                <state key="normal" title="测试">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="test" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6NQ-zD-2HZ"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pEg-cA-Aj3">
-                                <rect key="frame" x="137" y="518" width="46" height="30"/>
+                                <rect key="frame" x="16" y="518" width="46" height="30"/>
                                 <state key="normal" title="原图">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -67,17 +58,8 @@
                                     <action selector="showOriginalImage" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vIa-18-jSu"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOf-6b-1F8">
-                                <rect key="frame" x="137" y="383" width="46" height="30"/>
-                                <state key="normal" title="岁月">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="photoEffectTransfer" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bmN-6H-fhi"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Q7-za-cYk">
-                                <rect key="frame" x="258" y="383" width="46" height="30"/>
+                                <rect key="frame" x="258" y="457" width="46" height="30"/>
                                 <state key="normal" title="单色">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -86,7 +68,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3dd-kZ-Uje">
-                                <rect key="frame" x="16" y="468" width="46" height="30"/>
+                                <rect key="frame" x="16" y="457" width="46" height="30"/>
                                 <state key="normal" title="褪色">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -95,7 +77,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eGj-MA-4Mg">
-                                <rect key="frame" x="75" y="468" width="46" height="30"/>
+                                <rect key="frame" x="102" y="457" width="46" height="30"/>
                                 <state key="normal" title="冲印">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -104,7 +86,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbT-U7-yYo">
-                                <rect key="frame" x="137" y="468" width="46" height="30"/>
+                                <rect key="frame" x="187" y="457" width="46" height="30"/>
                                 <state key="normal" title="铬黄">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -113,12 +95,30 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4wS-Pn-kYp">
-                                <rect key="frame" x="75" y="383" width="46" height="30"/>
+                                <rect key="frame" x="102" y="377" width="46" height="30"/>
                                 <state key="normal" title="色调">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="photoEffectTonal" destination="vXZ-lx-hvc" eventType="touchUpInside" id="D3v-OU-cLx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neb-CE-fym">
+                                <rect key="frame" x="230" y="518" width="74" height="30"/>
+                                <state key="normal" title="自动改善">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="autoAdjust" destination="vXZ-lx-hvc" eventType="touchUpInside" id="d2X-jo-4fI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOf-6b-1F8">
+                                <rect key="frame" x="187" y="377" width="46" height="30"/>
+                                <state key="normal" title="岁月">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectTransfer" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bmN-6H-fhi"/>
                                 </connections>
                             </button>
                         </subviews>
