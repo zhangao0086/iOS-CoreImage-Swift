@@ -25,7 +25,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="sepiaTone" destination="vXZ-lx-hvc" eventType="touchUpInside" id="npn-g7-XlQ"/>
+                                    <action selector="photoEffectInstant" destination="vXZ-lx-hvc" eventType="touchUpInside" id="d3U-dU-985"/>
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="9HJ-tp-4ci">
@@ -35,12 +35,12 @@
                                 </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Nm-8t-T1g">
-                                <rect key="frame" x="258" y="383" width="46" height="30"/>
+                                <rect key="frame" x="197" y="383" width="46" height="30"/>
                                 <state key="normal" title="黑白">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="monochrome" destination="vXZ-lx-hvc" eventType="touchUpInside" id="XTt-UC-7nN"/>
+                                    <action selector="photoEffectNoir" destination="vXZ-lx-hvc" eventType="touchUpInside" id="nEK-J7-VfN"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="强度:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0K-6D-nwO">
@@ -65,6 +65,60 @@
                                 </state>
                                 <connections>
                                     <action selector="showOriginalImage" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vIa-18-jSu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOf-6b-1F8">
+                                <rect key="frame" x="137" y="383" width="46" height="30"/>
+                                <state key="normal" title="岁月">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectTransfer" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bmN-6H-fhi"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Q7-za-cYk">
+                                <rect key="frame" x="258" y="383" width="46" height="30"/>
+                                <state key="normal" title="单色">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectMono" destination="vXZ-lx-hvc" eventType="touchUpInside" id="i0U-ai-Yub"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3dd-kZ-Uje">
+                                <rect key="frame" x="16" y="468" width="46" height="30"/>
+                                <state key="normal" title="褪色">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectFade" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6cL-1G-7mH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eGj-MA-4Mg">
+                                <rect key="frame" x="75" y="468" width="46" height="30"/>
+                                <state key="normal" title="冲印">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectProcess" destination="vXZ-lx-hvc" eventType="touchUpInside" id="OK7-x9-qlo"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbT-U7-yYo">
+                                <rect key="frame" x="137" y="468" width="46" height="30"/>
+                                <state key="normal" title="铬黄">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectChrome" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dqI-Cj-Bma"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4wS-Pn-kYp">
+                                <rect key="frame" x="75" y="383" width="46" height="30"/>
+                                <state key="normal" title="色调">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoEffectTonal" destination="vXZ-lx-hvc" eventType="touchUpInside" id="D3v-OU-cLx"/>
                                 </connections>
                             </button>
                         </subviews>

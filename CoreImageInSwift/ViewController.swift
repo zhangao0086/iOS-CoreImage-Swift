@@ -70,35 +70,76 @@ class ViewController: UIViewController {
     }
     
     // MARK: - 怀旧
-    @IBAction func sepiaTone() {
+    @IBAction func photoEffectInstant() {
         let inputImage = CIImage(image: originalImage)
-        filter = CIFilter(name: "CISepiaTone")
+        filter = CIFilter(name: "CIPhotoEffectInstant")
         filter.setValue(inputImage, forKey: kCIInputImageKey)
-        filter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
+//        filter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
         outputImage()
     }
     
     // MARK: - 黑白
-    @IBAction func monochrome() {
+    @IBAction func photoEffectNoir() {
         let inputImage = CIImage(image: originalImage)
-        filter = CIFilter(name: "CIColorMonochrome")
+        filter = CIFilter(name: "CIPhotoEffectNoir")
         filter.setValue(inputImage, forKey: kCIInputImageKey)
-        filter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
+//        filter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
         outputImage()
     }
     
-    @IBAction func posterize() {
+    // MARK: - 色调
+    @IBAction func photoEffectTonal() {
         let inputImage = CIImage(image: originalImage)
-        filter = CIFilter(name: "CIColorPosterize")
+        filter = CIFilter(name: "CIPhotoEffectTonal")
         filter.setValue(inputImage, forKey: kCIInputImageKey)
-        intensitySlider.minimumValue = 2
-        intensitySlider.maximumValue = 30
-        filter.setValue(20, forKey: "inputLevels")
+//        intensitySlider.minimumValue = 2
+//        intensitySlider.maximumValue = 30
+//        filter.setValue(20, forKey: "inputLevels")
+        outputImage()
+    }
+    
+    // MARK: - 岁月
+    @IBAction func photoEffectTransfer() {
+        let inputImage = CIImage(image: originalImage)
+        filter = CIFilter(name: "CIPhotoEffectTransfer")
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
+        outputImage()
+    }
+    
+    // MARK: - 单色
+    @IBAction func photoEffectMono() {
+        let inputImage = CIImage(image: originalImage)
+        filter = CIFilter(name: "CIPhotoEffectMono")
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
+        outputImage()
+    }
+    
+    // MARK: - 褪色
+    @IBAction func photoEffectFade() {
+        let inputImage = CIImage(image: originalImage)
+        filter = CIFilter(name: "CIPhotoEffectFade")
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
+        outputImage()
+    }
+
+    // MARK: - 冲印
+    @IBAction func photoEffectProcess() {
+        let inputImage = CIImage(image: originalImage)
+        filter = CIFilter(name: "CIPhotoEffectProcess")
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
+        outputImage()
+    }
+    
+    // MARK: - 铬黄
+    @IBAction func photoEffectChrome() {
+        let inputImage = CIImage(image: originalImage)
+        filter = CIFilter(name: "CIPhotoEffectChrome")
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
         outputImage()
     }
     
     @IBAction func test() {
-        posterize()
+//        minimumComponent()
         outputImage()
     }
 }
