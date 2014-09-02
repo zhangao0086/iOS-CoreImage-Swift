@@ -20,7 +20,7 @@
                                 <rect key="frame" x="35" y="28" width="250" height="320"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="95F-bu-C9y">
-                                <rect key="frame" x="16" y="460" width="46" height="30"/>
+                                <rect key="frame" x="16" y="383" width="46" height="30"/>
                                 <state key="normal" title="怀旧">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -28,8 +28,38 @@
                                     <action selector="sepiaTone" destination="vXZ-lx-hvc" eventType="touchUpInside" id="npn-g7-XlQ"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="9HJ-tp-4ci">
+                                <rect key="frame" x="68" y="427" width="238" height="31"/>
+                                <connections>
+                                    <action selector="onValueChanged" destination="vXZ-lx-hvc" eventType="valueChanged" id="pLJ-YK-tHl"/>
+                                </connections>
+                            </slider>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Nm-8t-T1g">
+                                <rect key="frame" x="258" y="383" width="46" height="30"/>
+                                <state key="normal" title="黑白">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="monochrome" destination="vXZ-lx-hvc" eventType="touchUpInside" id="XTt-UC-7nN"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="强度:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0K-6D-nwO">
+                                <rect key="frame" x="16" y="431" width="46" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0F2-b0-7FO">
+                                <rect key="frame" x="258" y="518" width="46" height="30"/>
+                                <state key="normal" title="测试">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="test" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6NQ-zD-2HZ"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pEg-cA-Aj3">
-                                <rect key="frame" x="137" y="460" width="46" height="30"/>
+                                <rect key="frame" x="137" y="518" width="46" height="30"/>
                                 <state key="normal" title="原图">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -42,6 +72,7 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="eeD-pL-iF9" id="1L5-Gh-7OC"/>
+                        <outlet property="intensitySlider" destination="9HJ-tp-4ci" id="VHv-wF-RDN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
