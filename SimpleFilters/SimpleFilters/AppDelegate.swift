@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  CoreImageInSwift
+//  SimpleFilters
 //
-//  Created by ZhangAo on 14-8-30.
+//  Created by ZhangAo on 14-9-7.
 //  Copyright (c) 2014年 zhangao. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  CoreImageInSwift
+//  SimpleFilters
 //
-//  Created by ZhangAo on 14-8-30.
+//  Created by ZhangAo on 14-9-7.
 //  Copyright (c) 2014年 zhangao. All rights reserved.
 //
 
@@ -13,24 +13,24 @@ class ViewController: UIViewController {
     
     lazy var originalImage: UIImage = {
         return UIImage(named: "Image")
-    }()
+        }()
     lazy var context: CIContext = {
         return CIContext(options: nil)
-    }()
+        }()
     var filter: CIFilter!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.imageView.layer.shadowOpacity = 0.8
         self.imageView.layer.shadowColor = UIColor.blackColor().CGColor
         self.imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
         
         self.imageView.image = originalImage
-
+        
         showFiltersInConsole()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -48,7 +48,7 @@ class ViewController: UIViewController {
             println(attributes)
         }
     }
-
+    
     @IBAction func showOriginalImage() {
         self.imageView.image = originalImage
     }
@@ -79,7 +79,7 @@ class ViewController: UIViewController {
         filter = CIFilter(name: "CIPhotoEffectInstant")
         outputImage()
     }
-
+    
     // MARK: - 黑白
     @IBAction func photoEffectNoir() {
         filter = CIFilter(name: "CIPhotoEffectNoir")
@@ -109,7 +109,7 @@ class ViewController: UIViewController {
         filter = CIFilter(name: "CIPhotoEffectFade")
         outputImage()
     }
-
+    
     // MARK: - 冲印
     @IBAction func photoEffectProcess() {
         filter = CIFilter(name: "CIPhotoEffectProcess")

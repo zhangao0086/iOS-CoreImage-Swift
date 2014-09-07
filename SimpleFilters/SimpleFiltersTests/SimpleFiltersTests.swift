@@ -1,15 +1,15 @@
 //
-//  CoreImageInSwiftTests.swift
-//  CoreImageInSwiftTests
+//  SimpleFiltersTests.swift
+//  SimpleFiltersTests
 //
-//  Created by ZhangAo on 14-8-30.
+//  Created by ZhangAo on 14-9-7.
 //  Copyright (c) 2014年 zhangao. All rights reserved.
 //
 
 import UIKit
 import XCTest
 
-class CoreImageInSwiftTests: XCTestCase {
+class SimpleFiltersTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
