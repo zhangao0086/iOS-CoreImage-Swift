@@ -5,3 +5,4 @@ xcuserdata
 *.xccheckout
 DerivedData
 *.xcuserstate
+*.DS_Store
