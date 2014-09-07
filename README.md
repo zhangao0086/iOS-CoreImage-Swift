@@ -1,6 +1,8 @@
 iOS CoreImage Swift
 ===================
 
+Updated for Xcode 6 beta 7.  
+---
 iOS8 Core Image In Swift：自动改善图像以及内置滤镜的使用  
 Auto Enhancing And Simple Filter
 
