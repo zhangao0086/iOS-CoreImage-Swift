@@ -1,4 +1,4 @@
-iOS CoreImage Swift
+iOS Core Image Swift
 ===================
 
 Updated for Xcode 6 beta 7.  

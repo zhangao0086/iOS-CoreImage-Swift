@@ -13,10 +13,12 @@ class ViewController: UIViewController {
     
     lazy var originalImage: UIImage = {
         return UIImage(named: "Image")
-        }()
+    }()
+    
     lazy var context: CIContext = {
         return CIContext(options: nil)
-        }()
+    }()
+    
     var filter: CIFilter!
     
     override func viewDidLoad() {
@@ -37,7 +39,6 @@ class ViewController: UIViewController {
     }
     
     // MARK: -
-    
     func showFiltersInConsole() {
         let filterNames = CIFilter.filterNamesInCategory(kCICategoryColorEffect)
         println(filterNames.count)
