@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C63FD2019BE016000FC39FB /* CIColorInvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C63FD1F19BE016000FC39FB /* CIColorInvert.swift */; };
 		9C9E494B19BC4F2600D49AB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E494A19BC4F2600D49AB6 /* AppDelegate.swift */; };
 		9C9E494D19BC4F2600D49AB6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E494C19BC4F2600D49AB6 /* ViewController.swift */; };
 		9C9E495019BC4F2700D49AB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C9E494E19BC4F2700D49AB6 /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C63FD1F19BE016000FC39FB /* CIColorInvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIColorInvert.swift; sourceTree = "<group>"; };
 		9C9E494519BC4F2600D49AB6 /* ComplexFilters.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ComplexFilters.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9E494919BC4F2600D49AB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C9E494A19BC4F2600D49AB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			children = (
 				9C9E494A19BC4F2600D49AB6 /* AppDelegate.swift */,
 				9C9E494C19BC4F2600D49AB6 /* ViewController.swift */,
+				9C63FD1F19BE016000FC39FB /* CIColorInvert.swift */,
 				9C9E494E19BC4F2700D49AB6 /* Main.storyboard */,
 				9C9E495119BC4F2700D49AB6 /* Images.xcassets */,
 				9C9E494819BC4F2600D49AB6 /* Supporting Files */,
@@ -210,6 +213,7 @@
 			files = (
 				9C9E494D19BC4F2600D49AB6 /* ViewController.swift in Sources */,
 				9C9E494B19BC4F2600D49AB6 /* AppDelegate.swift in Sources */,
+				9C63FD2019BE016000FC39FB /* CIColorInvert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +399,7 @@
 				9C9E496319BC4F2700D49AB6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9C9E496419BC4F2700D49AB6 /* Build configuration list for PBXNativeTarget "ComplexFiltersTests" */ = {
 			isa = XCConfigurationList;
@@ -403,6 +408,7 @@
 				9C9E496619BC4F2700D49AB6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
