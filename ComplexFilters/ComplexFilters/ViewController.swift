@@ -49,7 +49,7 @@ class ViewController: UIViewController {
 
     // MARK: -
     func showFiltersInConsole() {
-        let filterNames = CIFilter.filterNamesInCategory(kCICategoryColorAdjustment)
+        let filterNames = CIFilter.filterNamesInCategory(kCICategoryBuiltIn)
         println(filterNames.count)
         println(filterNames)
         for filterName in filterNames {
@@ -63,6 +63,50 @@ class ViewController: UIViewController {
         println(slider.value)
         filter.setValue(slider.value, forKey: kCIInputAngleKey)
         let outputImage = filter.outputImage
+        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
+        imageView.image = UIImage(CGImage: cgImage)
+    }
+    
+    @IBAction func oldFilmEffect() {
+        let inputImage = CIImage(image: originalImage)
+        
+        let sepiaToneFilter = CIFilter(name: "CISepiaTone")
+        sepiaToneFilter.setValue(inputImage, forKey: kCIInputImageKey)
+        sepiaToneFilter.setValue(1, forKey: kCIInputIntensityKey)
+        
+        let whiteSpecksFilter = CIFilter(name: "CIColorMatrix")
+        whiteSpecksFilter.setValue(CIFilter(name: "CIRandomGenerator").outputImage.imageByCroppingToRect(inputImage.extent()), forKey: kCIInputImageKey)
+        whiteSpecksFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputRVector")
+        whiteSpecksFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputGVector")
+        whiteSpecksFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputBVector")
+        whiteSpecksFilter.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputBiasVector")
+        
+        let sourceOverCompositingFilter = CIFilter(name: "CISourceOverCompositing")
+        sourceOverCompositingFilter.setValue(whiteSpecksFilter.outputImage, forKey: kCIInputBackgroundImageKey)
+        sourceOverCompositingFilter.setValue(sepiaToneFilter.outputImage, forKey: kCIInputImageKey)
+        
+        
+        let affineTransformFilter = CIFilter(name: "CIAffineTransform")
+        affineTransformFilter.setValue(CIFilter(name: "CIRandomGenerator").outputImage.imageByCroppingToRect(inputImage.extent()), forKey: kCIInputImageKey)
+        affineTransformFilter.setValue(NSValue(CGAffineTransform: CGAffineTransformMakeScale(1.5, 25)), forKey: kCIInputTransformKey)
+
+        let darkScratchesFilter = CIFilter(name: "CIColorMatrix")
+        darkScratchesFilter.setValue(affineTransformFilter.outputImage, forKey: kCIInputImageKey)
+        darkScratchesFilter.setValue(CIVector(x: 4, y: 0, z: 0, w: 0), forKey: "inputRVector")
+        darkScratchesFilter.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputGVector")
+        darkScratchesFilter.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputBVector")
+        darkScratchesFilter.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputAVector")
+        darkScratchesFilter.setValue(CIVector(x: 0, y: 1, z: 1, w: 1), forKey: "inputBiasVector")
+        
+        let minimumComponentFilter = CIFilter(name: "CIMinimumComponent")
+        minimumComponentFilter.setValue(darkScratchesFilter.outputImage, forKey: kCIInputImageKey)
+
+        
+        let multiplyCompositingFilter = CIFilter(name: "CIMultiplyCompositing")
+        multiplyCompositingFilter.setValue(sourceOverCompositingFilter.outputImage, forKey: kCIInputBackgroundImageKey)
+        multiplyCompositingFilter.setValue(minimumComponentFilter.outputImage, forKey: kCIInputImageKey)
+        
+        let outputImage = multiplyCompositingFilter.outputImage
         let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
         imageView.image = UIImage(CGImage: cgImage)
     }
