@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9C63FD2019BE016000FC39FB /* CIColorInvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C63FD1F19BE016000FC39FB /* CIColorInvert.swift */; };
+		9C8A7C1D19C08E7E00F9F7CB /* CubeMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A7C1C19C08E7E00F9F7CB /* CubeMap.c */; };
 		9C9E494B19BC4F2600D49AB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E494A19BC4F2600D49AB6 /* AppDelegate.swift */; };
 		9C9E494D19BC4F2600D49AB6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E494C19BC4F2600D49AB6 /* ViewController.swift */; };
 		9C9E495019BC4F2700D49AB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C9E494E19BC4F2700D49AB6 /* Main.storyboard */; };
@@ -27,6 +28,8 @@
 
 /* Begin PBXFileReference section */
 		9C63FD1F19BE016000FC39FB /* CIColorInvert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIColorInvert.swift; sourceTree = "<group>"; };
+		9C8A7C1B19C08E7C00F9F7CB /* ComplexFilters-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ComplexFilters-Bridging-Header.h"; sourceTree = "<group>"; };
+		9C8A7C1C19C08E7E00F9F7CB /* CubeMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CubeMap.c; sourceTree = "<group>"; };
 		9C9E494519BC4F2600D49AB6 /* ComplexFilters.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ComplexFilters.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9E494919BC4F2600D49AB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C9E494A19BC4F2600D49AB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,10 +82,12 @@
 			children = (
 				9C9E494A19BC4F2600D49AB6 /* AppDelegate.swift */,
 				9C9E494C19BC4F2600D49AB6 /* ViewController.swift */,
+				9C8A7C1C19C08E7E00F9F7CB /* CubeMap.c */,
 				9C63FD1F19BE016000FC39FB /* CIColorInvert.swift */,
 				9C9E494E19BC4F2700D49AB6 /* Main.storyboard */,
 				9C9E495119BC4F2700D49AB6 /* Images.xcassets */,
 				9C9E494819BC4F2600D49AB6 /* Supporting Files */,
+				9C8A7C1B19C08E7C00F9F7CB /* ComplexFilters-Bridging-Header.h */,
 			);
 			path = ComplexFilters;
 			sourceTree = "<group>";
@@ -214,6 +219,7 @@
 				9C9E494D19BC4F2600D49AB6 /* ViewController.swift in Sources */,
 				9C9E494B19BC4F2600D49AB6 /* AppDelegate.swift in Sources */,
 				9C63FD2019BE016000FC39FB /* CIColorInvert.swift in Sources */,
+				9C8A7C1D19C08E7E00F9F7CB /* CubeMap.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,9 +335,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = ComplexFilters/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ComplexFilters/ComplexFilters-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -340,9 +349,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = ComplexFilters/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ComplexFilters/ComplexFilters-Bridging-Header.h";
 			};
 			name = Release;
 		};

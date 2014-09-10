@@ -117,6 +117,16 @@ class ViewController: UIViewController {
         let outputImage = colorInvertFilter.outputImage
         let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
         imageView.image = UIImage(CGImage: cgImage)
+        
+//        let cubeData = createCubeMap()
+//        let data = NSData(bytesNoCopy: cubeData, length: 4194304, freeWhenDone: true)
+//        let colorCubeFilter = CIFilter(name: "CIColorCube")
+//        colorCubeFilter.setValue(64, forKey: "inputCubeDimension")
+//        colorCubeFilter.setValue(data, forKey: "inputCubeData")
+//        colorCubeFilter.setValue(CIImage(image: originalImage), forKey: kCIInputImageKey)
+//        let outputImage = colorCubeFilter.outputImage
+//        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
+//        imageView.image = UIImage(CGImage: cgImage)
     }
 }
 
