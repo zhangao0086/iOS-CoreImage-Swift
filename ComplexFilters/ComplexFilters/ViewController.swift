@@ -118,15 +118,30 @@ class ViewController: UIViewController {
         let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
         imageView.image = UIImage(CGImage: cgImage)
         
-//        let cubeData = createCubeMap()
-//        let data = NSData(bytesNoCopy: cubeData, length: 4194304, freeWhenDone: true)
-//        let colorCubeFilter = CIFilter(name: "CIColorCube")
-//        colorCubeFilter.setValue(64, forKey: "inputCubeDimension")
-//        colorCubeFilter.setValue(data, forKey: "inputCubeData")
-//        colorCubeFilter.setValue(CIImage(image: originalImage), forKey: kCIInputImageKey)
-//        let outputImage = colorCubeFilter.outputImage
-//        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
-//        imageView.image = UIImage(CGImage: cgImage)
+    }
+    
+    @IBAction func showOriginalImage() {
+        self.imageView.image = originalImage
+    }
+    
+    @IBAction func replaceBackground() {
+        let cubeMap = createCubeMap(60,90)
+        let data = NSData(bytesNoCopy: cubeMap.data, length: Int(cubeMap.length), freeWhenDone: true)
+        let colorCubeFilter = CIFilter(name: "CIColorCube")
+        
+        colorCubeFilter.setValue(cubeMap.dimension, forKey: "inputCubeDimension")
+        colorCubeFilter.setValue(data, forKey: "inputCubeData")
+        colorCubeFilter.setValue(CIImage(image: imageView.image), forKey: kCIInputImageKey)
+        var outputImage = colorCubeFilter.outputImage
+        
+        let sourceOverCompositingFilter = CIFilter(name: "CISourceOverCompositing")
+        sourceOverCompositingFilter.setValue(outputImage, forKey: kCIInputImageKey)
+        sourceOverCompositingFilter.setValue(CIImage(image: UIImage(named: "background")), forKey: kCIInputBackgroundImageKey)
+
+        outputImage = sourceOverCompositingFilter.outputImage
+        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
+        imageView.image = UIImage(CGImage: cgImage)
+        
     }
 }
 
