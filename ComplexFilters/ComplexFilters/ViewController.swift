@@ -124,6 +124,10 @@ class ViewController: UIViewController {
         self.imageView.image = originalImage
     }
     
+    @IBAction func showImage2() {
+        imageView.image = UIImage(named: "Image2")
+    }
+    
     @IBAction func replaceBackground() {
         let cubeMap = createCubeMap(60,90)
         let data = NSData(bytesNoCopy: cubeMap.data, length: Int(cubeMap.length), freeWhenDone: true)

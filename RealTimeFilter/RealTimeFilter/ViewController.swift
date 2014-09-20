@@ -13,15 +13,15 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     @IBOutlet var filterButtonsContainer: UIView!
     var captureSession: AVCaptureSession!
     var previewLayer: CALayer!
-    var filter: CIFilter!
-    lazy var context: CIContext = {
-        let eaglContext = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
-        let options = [kCIContextWorkingColorSpace : NSNull()]
-        return CIContext(EAGLContext: eaglContext, options: options)
-    }()
-    lazy var filterNames: [String] = {
-        return ["CIColorInvert","CIPhotoEffectMono","CIPhotoEffectInstant","CIPhotoEffectTransfer"]
-    }()
+//    var filter: CIFilter!
+//    lazy var context: CIContext = {
+//        let eaglContext = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
+//        let options = [kCIContextWorkingColorSpace : NSNull()]
+//        return CIContext(EAGLContext: eaglContext, options: options)
+//    }()
+//    lazy var filterNames: [String] = {
+//        return ["CIColorInvert","CIPhotoEffectMono","CIPhotoEffectInstant","CIPhotoEffectTransfer"]
+//    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +31,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         previewLayer.position = CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height / 2.0);
         previewLayer.setAffineTransform(CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0)));
         
+        //ignored
         filterButtonsContainer.hidden = true
         
         self.view.layer.insertSublayer(previewLayer, atIndex: 0)
@@ -45,7 +46,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     
     func setupCaptureSession() {
         captureSession = AVCaptureSession()
-        captureSession.sessionPreset = AVCaptureSessionPresetPhoto
+        captureSession.sessionPreset = AVCaptureSessionPresetHigh
         
         let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         
@@ -55,7 +56,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         }
         
         let dataOutput = AVCaptureVideoDataOutput()
-        dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA]
+        dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]
         dataOutput.alwaysDiscardsLateVideoFrames = true
         
         if captureSession.canAddOutput(dataOutput) {
@@ -68,26 +69,39 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
 
     @IBAction func openCamera(sender: UIButton) {
         sender.enabled = false
-        self.filterButtonsContainer.hidden = false
         captureSession.startRunning()
+//        self.filterButtonsContainer.hidden = false
     }
     
     @IBAction func applyFilter(sender: UIButton) {
-        var filterName = filterNames[sender.tag]
-        filter = CIFilter(name: filterName)
+//        var filterName = filterNames[sender.tag]
+//        filter = CIFilter(name: filterName)
     }
     
     //MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
+    func captureOutput(captureOutput: AVCaptureOutput!,
+                        didOutputSampleBuffer sampleBuffer: CMSampleBuffer!,
+                        fromConnection connection: AVCaptureConnection!) {
         let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        var outputImage = CIImage(CVPixelBuffer: imageBuffer)
+        CVPixelBufferLockBaseAddress(imageBuffer, 0)
+        let width = CVPixelBufferGetWidthOfPlane(imageBuffer, 0)
+        let height = CVPixelBufferGetHeightOfPlane(imageBuffer, 0)
+        let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0)
+        let lumaBuffer = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0)
         
-        if filter != nil {
-            filter.setValue(outputImage, forKey: kCIInputImageKey)
-            outputImage = filter.outputImage
-        }
+        let grayColorSpace = CGColorSpaceCreateDeviceGray()
+        let context = CGBitmapContextCreate(lumaBuffer, width, height, 8, bytesPerRow, grayColorSpace, CGBitmapInfo.allZeros)
+        let cgImage = CGBitmapContextCreateImage(context)
         
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
+        
+//        var outputImage = CIImage(CVPixelBuffer: imageBuffer)
+        
+//        if filter != nil {
+//            filter.setValue(outputImage, forKey: kCIInputImageKey)
+//            outputImage = filter.outputImage
+//        }
+//        
+//        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
         
         dispatch_sync(dispatch_get_main_queue(), {
             self.previewLayer.contents = cgImage
