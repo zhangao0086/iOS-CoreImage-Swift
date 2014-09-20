@@ -24,5 +24,5 @@ Face Detection And Pixellated
 ![PNG](https://raw.githubusercontent.com/zhangao0086/iOS-CoreImage-Swift/master/intro5.png)
 
 [iOS8 Core Image In Swift：自动改善图像以及内置滤镜的使用](http://blog.csdn.net/zhangao0086/article/details/39012231)  
-[iOS8 Core Image In Swift：更复杂的滤镜](http://blog.csdn.net/zhangao0086/article/details/39120331)
+[iOS8 Core Image In Swift：更复杂的滤镜](http://blog.csdn.net/zhangao0086/article/details/39120331)  
 [iOS8 Core Image In Swift：人脸检测以及马赛克](http://blog.csdn.net/zhangao0086/article/details/39253707)
