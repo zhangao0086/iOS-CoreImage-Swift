@@ -88,12 +88,14 @@ class ViewController: UIViewController {
         let faceFeatures = detector.featuresInImage(inputImage)
         // 3.
         var maskImage: CIImage!
+        var scale = min(imageView.bounds.size.width / inputImage.extent().size.width,
+                        imageView.bounds.size.height / inputImage.extent().size.height)
         for faceFeature in faceFeatures {
             println(faceFeature.bounds)
             // 4.
             let centerX = faceFeature.bounds.origin.x + faceFeature.bounds.size.width / 2
             let centerY = faceFeature.bounds.origin.y + faceFeature.bounds.size.height / 2
-            let radius = min(faceFeature.bounds.size.width, faceFeature.bounds.size.height) 
+            let radius = min(faceFeature.bounds.size.width, faceFeature.bounds.size.height) * scale
             let radialGradient = CIFilter(name: "CIRadialGradient",
                                           withInputParameters: [
                                             "inputRadius0" : radius,
@@ -115,6 +117,7 @@ class ViewController: UIViewController {
                         kCIInputBackgroundImageKey : maskImage
                     ]).outputImage
             }
+            println(maskImage.extent())
         }
         // 6.
         let blendFilter = CIFilter(name: "CIBlendWithMask")
