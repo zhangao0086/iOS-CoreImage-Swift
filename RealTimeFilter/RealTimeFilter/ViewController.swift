@@ -38,8 +38,11 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         filterButtonsContainer.hidden = true
         
         self.view.layer.insertSublayer(previewLayer, atIndex: 0)
-        
         setupCaptureSession()
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        previewLayer.bounds.size = size
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,6 +89,9 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     }
     
     @IBAction func takePicture(sender: UIButton) {
+        if ciImage == nil {
+            return
+        }
         sender.enabled = false
         captureSession.stopRunning()
 
@@ -102,6 +108,10 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
                 self.captureSession.startRunning()
                 sender.enabled = true
         }
+    }
+    
+    @IBAction func record() {
+        
     }
     
     //MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
