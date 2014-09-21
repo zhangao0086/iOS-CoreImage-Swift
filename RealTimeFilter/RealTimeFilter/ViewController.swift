@@ -122,6 +122,8 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     // MARK: - Video Records
     @IBAction func record() {
         if isWriting {
+            self.isWriting = false
+            assetWriterPixelBufferInput = nil
             recordsButton.enabled = false
             assetWriter?.finishWritingWithCompletionHandler({[unowned self] () -> Void in
                 println("录制完成")
@@ -130,10 +132,10 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             })
         } else {
             createWriter()
-            isWriting = true
             recordsButton.setTitle("停止录制...", forState: UIControlState.Normal)
             assetWriter?.startWriting()
             assetWriter?.startSessionAtSourceTime(currentSampleTime!)
+            isWriting = true
         }
     }
     
@@ -147,7 +149,6 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             }
             self.recordsButton.enabled = true
             self.recordsButton.setTitle("开始录制", forState: UIControlState.Normal)
-            self.isWriting = false
         })
     }
     
@@ -160,7 +161,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     func checkForAndDeleteFile() {
         let fm = NSFileManager.defaultManager()
         var url = movieURL()
-        let exist = fm.fileExistsAtPath(movieURL().absoluteString!)
+        let exist = fm.fileExistsAtPath(movieURL().path!)
         
         var error: NSError?
         if exist {
@@ -177,6 +178,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         var error: NSError?
         assetWriter = AVAssetWriter(URL: movieURL(), fileType: AVFileTypeQuickTimeMovie, error: &error)
+        println(assetWriter?.directoryForTemporaryFiles)
         if let errorDescription = error?.localizedDescription {
             println("创建writer失败")
             println(errorDescription)
@@ -192,11 +194,12 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         let assetWriterVideoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: outputSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         assetWriterVideoInput.transform = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
-        
+
         let sourcePixelBufferAttributesDictionary = [
             kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA,
             kCVPixelBufferWidthKey : Int(currentVideoDimensions!.width),
-            kCVPixelBufferHeightKey : Int(currentVideoDimensions!.height)
+            kCVPixelBufferHeightKey : Int(currentVideoDimensions!.height),
+            kCVPixelFormatOpenGLESCompatibility : kCFBooleanTrue
         ]
         assetWriterPixelBufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
                                                 sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
