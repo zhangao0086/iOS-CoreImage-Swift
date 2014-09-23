@@ -178,7 +178,6 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         var error: NSError?
         assetWriter = AVAssetWriter(URL: movieURL(), fileType: AVFileTypeQuickTimeMovie, error: &error)
-        println(assetWriter?.directoryForTemporaryFiles)
         if let errorDescription = error?.localizedDescription {
             println("创建writer失败")
             println(errorDescription)
@@ -213,33 +212,32 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
     func captureOutput(captureOutput: AVCaptureOutput!,didOutputSampleBuffer sampleBuffer: CMSampleBuffer!,fromConnection connection: AVCaptureConnection!) {
-        
-        let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        
-        let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
-        currentVideoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
-        currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-        
-        // CVPixelBufferLockBaseAddress(imageBuffer, 0)
-        // let width = CVPixelBufferGetWidthOfPlane(imageBuffer, 0)
-        // let height = CVPixelBufferGetHeightOfPlane(imageBuffer, 0)
-        // let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0)
-        // let lumaBuffer = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0)
-        //
-        // let grayColorSpace = CGColorSpaceCreateDeviceGray()
-        // let context = CGBitmapContextCreate(lumaBuffer, width, height, 8, bytesPerRow, grayColorSpace, CGBitmapInfo.allZeros)
-        // let cgImage = CGBitmapContextCreateImage(context)
-
-        var outputImage = CIImage(CVPixelBuffer: imageBuffer)
-        
-        if filter != nil {
-            filter.setValue(outputImage, forKey: kCIInputImageKey)
-            outputImage = filter.outputImage
-        }
-        
-        if isWriting {
-            if assetWriterPixelBufferInput?.assetWriterInput.readyForMoreMediaData == true {
-                autoreleasepool {
+        autoreleasepool {
+            let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
+            
+            let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
+            self.currentVideoDimensions = CMVideoFormatDescriptionGetDimensions(formatDescription)
+            self.currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+            
+            // CVPixelBufferLockBaseAddress(imageBuffer, 0)
+            // let width = CVPixelBufferGetWidthOfPlane(imageBuffer, 0)
+            // let height = CVPixelBufferGetHeightOfPlane(imageBuffer, 0)
+            // let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0)
+            // let lumaBuffer = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0)
+            //
+            // let grayColorSpace = CGColorSpaceCreateDeviceGray()
+            // let context = CGBitmapContextCreate(lumaBuffer, width, height, 8, bytesPerRow, grayColorSpace, CGBitmapInfo.allZeros)
+            // let cgImage = CGBitmapContextCreateImage(context)
+            
+            var outputImage = CIImage(CVPixelBuffer: imageBuffer)
+            
+            if self.filter != nil {
+                self.filter.setValue(outputImage, forKey: kCIInputImageKey)
+                outputImage = self.filter.outputImage
+            }
+            // 录制视频的处理
+            if self.isWriting {
+                if self.assetWriterPixelBufferInput?.assetWriterInput.readyForMoreMediaData == true {
                     var newPixelBuffer: Unmanaged<CVPixelBuffer>? = nil
                     CVPixelBufferPoolCreatePixelBuffer(nil, self.assetWriterPixelBufferInput?.pixelBufferPool, &newPixelBuffer)
                     
@@ -247,34 +245,34 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
                     
                     let success = self.assetWriterPixelBufferInput?.appendPixelBuffer(newPixelBuffer?.takeUnretainedValue(), withPresentationTime: self.currentSampleTime!)
                     
-                    newPixelBuffer?.release()
+                    newPixelBuffer?.autorelease()
                     
                     if success == false {
                         println("Pixel Buffer没有附加成功")
                     }
                 }
             }
+            
+            let orientation = UIDevice.currentDevice().orientation
+            var t: CGAffineTransform!
+            if orientation == UIDeviceOrientation.Portrait {
+                t = CGAffineTransformMakeRotation(CGFloat(-M_PI / 2.0))
+            } else if orientation == UIDeviceOrientation.PortraitUpsideDown {
+                t = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
+            } else if (orientation == UIDeviceOrientation.LandscapeRight) {
+                t = CGAffineTransformMakeRotation(CGFloat(M_PI))
+            } else {
+                t = CGAffineTransformMakeRotation(0)
+            }
+            outputImage = outputImage.imageByApplyingTransform(t)
+            
+            let cgImage = self.context.createCGImage(outputImage, fromRect: outputImage.extent())
+            self.ciImage = outputImage
+            
+            dispatch_sync(dispatch_get_main_queue(), {
+                self.previewLayer.contents = cgImage
+            })
         }
-        
-        let orientation = UIDevice.currentDevice().orientation
-        var t: CGAffineTransform!
-        if orientation == UIDeviceOrientation.Portrait {
-            t = CGAffineTransformMakeRotation(CGFloat(-M_PI / 2.0))
-        } else if orientation == UIDeviceOrientation.PortraitUpsideDown {
-            t = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
-        } else if (orientation == UIDeviceOrientation.LandscapeRight) {
-            t = CGAffineTransformMakeRotation(CGFloat(M_PI))
-        } else {
-            t = CGAffineTransformMakeRotation(0)
-        }
-        outputImage = outputImage.imageByApplyingTransform(t)
-        
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
-        ciImage = outputImage
-        
-        dispatch_sync(dispatch_get_main_queue(), {
-            self.previewLayer.contents = cgImage
-        })
     }
 }
 
