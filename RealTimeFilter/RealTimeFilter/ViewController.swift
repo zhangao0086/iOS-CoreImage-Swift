@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import AssetsLibrary
 
-class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDelegate {
+class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDelegate , AVCaptureMetadataOutputObjectsDelegate {
     @IBOutlet var filterButtonsContainer: UIView!
     var captureSession: AVCaptureSession!
     var previewLayer: CALayer!
@@ -24,6 +24,10 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         return ["CIColorInvert","CIPhotoEffectMono","CIPhotoEffectInstant","CIPhotoEffectTransfer"]
     }()
     var ciImage: CIImage!
+    
+    // 标记人脸
+    // var faceLayer: CALayer?
+    var faceObject: AVMetadataFaceObject?
     
     // Video Records
     @IBOutlet var recordsButton: UIButton!
@@ -82,6 +86,16 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         let queue = dispatch_queue_create("VideoQueue", DISPATCH_QUEUE_SERIAL)
         dataOutput.setSampleBufferDelegate(self, queue: queue)
+        
+        // 为了检测人脸
+        let metadataOutput = AVCaptureMetadataOutput()
+        metadataOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+        
+        if captureSession.canAddOutput(metadataOutput) {
+            captureSession.addOutput(metadataOutput)
+            println(metadataOutput.availableMetadataObjectTypes)
+            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeFace]
+        }
         
         captureSession.commitConfiguration()
     }
@@ -210,6 +224,50 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         }
     }
     
+    func makeFaceWithCIImage(inputImage: CIImage, faceObject: AVMetadataFaceObject) -> CIImage {
+        var filter = CIFilter(name: "CIPixellate")
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
+        // 1.
+        filter.setValue(max(inputImage.extent().size.width, inputImage.extent().size.height) / 60, forKey: kCIInputScaleKey)
+        
+        let fullPixellatedImage = filter.outputImage
+
+        var maskImage: CIImage!
+        let faceBounds = faceObject.bounds
+        
+        // 2.
+        let centerX = inputImage.extent().size.width * (faceBounds.origin.x + faceBounds.size.width / 2)
+        let centerY = inputImage.extent().size.height * (1 - faceBounds.origin.y - faceBounds.size.height / 2)
+        let radius = faceBounds.size.width * inputImage.extent().size.width / 2
+        let radialGradient = CIFilter(name: "CIRadialGradient",
+            withInputParameters: [
+                "inputRadius0" : radius,
+                "inputRadius1" : radius + 1,
+                "inputColor0" : CIColor(red: 0, green: 1, blue: 0, alpha: 1),
+                "inputColor1" : CIColor(red: 0, green: 0, blue: 0, alpha: 0),
+                kCIInputCenterKey : CIVector(x: centerX, y: centerY)
+            ])
+
+        let radialGradientOutputImage = radialGradient.outputImage.imageByCroppingToRect(inputImage.extent())
+        if maskImage == nil {
+            maskImage = radialGradientOutputImage
+        } else {
+            println(radialGradientOutputImage)
+            maskImage = CIFilter(name: "CISourceOverCompositing",
+                withInputParameters: [
+                    kCIInputImageKey : radialGradientOutputImage,
+                    kCIInputBackgroundImageKey : maskImage
+                ]).outputImage
+        }
+        
+        let blendFilter = CIFilter(name: "CIBlendWithMask")
+        blendFilter.setValue(fullPixellatedImage, forKey: kCIInputImageKey)
+        blendFilter.setValue(inputImage, forKey: kCIInputBackgroundImageKey)
+        blendFilter.setValue(maskImage, forKey: kCIInputMaskImageKey)
+        
+        return blendFilter.outputImage
+    }
+    
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
     func captureOutput(captureOutput: AVCaptureOutput!,didOutputSampleBuffer sampleBuffer: CMSampleBuffer!,fromConnection connection: AVCaptureConnection!) {
         autoreleasepool {
@@ -228,13 +286,16 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             // let grayColorSpace = CGColorSpaceCreateDeviceGray()
             // let context = CGBitmapContextCreate(lumaBuffer, width, height, 8, bytesPerRow, grayColorSpace, CGBitmapInfo.allZeros)
             // let cgImage = CGBitmapContextCreateImage(context)
-            
             var outputImage = CIImage(CVPixelBuffer: imageBuffer)
             
             if self.filter != nil {
                 self.filter.setValue(outputImage, forKey: kCIInputImageKey)
                 outputImage = self.filter.outputImage
             }
+            if self.faceObject != nil {
+                outputImage = self.makeFaceWithCIImage(outputImage, faceObject: self.faceObject!)
+            }
+            
             // 录制视频的处理
             if self.isWriting {
                 if self.assetWriterPixelBufferInput?.assetWriterInput.readyForMoreMediaData == true {
@@ -272,6 +333,37 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             dispatch_sync(dispatch_get_main_queue(), {
                 self.previewLayer.contents = cgImage
             })
+        }
+    }
+    
+    // MARK: - AVCaptureMetadataOutputObjectsDelegate
+    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
+        // println(metadataObjects)
+        if metadataObjects.count > 0 {
+            //识别到的第一张脸
+            faceObject = metadataObjects.first as? AVMetadataFaceObject
+            
+            /*
+            if faceLayer == nil {
+                faceLayer = CALayer()
+                faceLayer?.borderColor = UIColor.redColor().CGColor
+                faceLayer?.borderWidth = 1
+                view.layer.addSublayer(faceLayer)
+            }
+            let faceBounds = faceObject.bounds
+            let viewSize = view.bounds.size
+    
+            faceLayer?.position = CGPoint(x: viewSize.width * (1 - faceBounds.origin.y - faceBounds.size.height / 2),
+                                          y: viewSize.height * (faceBounds.origin.x + faceBounds.size.width / 2))
+            
+            faceLayer?.bounds.size = CGSize(width: faceBounds.size.height * viewSize.width,
+                                            height: faceBounds.size.width * viewSize.height)
+            print(faceBounds.origin)
+            print("###")
+            print(faceLayer!.position)
+            print("###")
+            print(faceLayer!.bounds)
+            */
         }
     }
 }
