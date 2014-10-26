@@ -169,7 +169,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     func movieURL() -> NSURL {
         var tempDir = NSTemporaryDirectory()
         let urlString = tempDir.stringByAppendingPathComponent("tmpMov.mov")
-        return NSURL(fileURLWithPath: urlString)
+        return NSURL(fileURLWithPath: urlString)!
     }
     
     func checkForAndDeleteFile() {
@@ -208,7 +208,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         assetWriterVideoInput.transform = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
 
-        let sourcePixelBufferAttributesDictionary = [
+        let sourcePixelBufferAttributesDictionary : [NSString : AnyObject] = [
             kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA,
             kCVPixelBufferWidthKey : Int(currentVideoDimensions!.width),
             kCVPixelBufferHeightKey : Int(currentVideoDimensions!.height),

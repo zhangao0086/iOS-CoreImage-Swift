@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     
     lazy var originalImage: UIImage = {
-        return UIImage(named: "Image")
+        return UIImage(named: "Image")!
     }()
     
     lazy var context: CIContext = {
