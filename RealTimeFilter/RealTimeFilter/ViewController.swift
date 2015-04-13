@@ -71,7 +71,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         
-        let deviceInput = AVCaptureDeviceInput.deviceInputWithDevice(captureDevice, error: nil) as AVCaptureDeviceInput
+        let deviceInput = AVCaptureDeviceInput.deviceInputWithDevice(captureDevice, error: nil) as! AVCaptureDeviceInput
         if captureSession.canAddInput(deviceInput) {
             captureSession.addInput(deviceInput)
         }
@@ -204,7 +204,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             AVVideoHeightKey : Int(currentVideoDimensions!.height)
         ]
         
-        let assetWriterVideoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: outputSettings)
+        let assetWriterVideoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: outputSettings as [NSObject : AnyObject])
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         assetWriterVideoInput.transform = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
 

@@ -44,7 +44,7 @@ class ViewController: UIViewController {
         println(filterNames.count)
         println(filterNames)
         for filterName in filterNames {
-            let filter = CIFilter(name: filterName as String)
+            let filter = CIFilter(name: filterName as! String)
             let attributes = filter.attributes()
             println(attributes)
         }
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
     // MARK: - 自动改善
     @IBAction func autoAdjust() {
         var inputImage = CIImage(image: originalImage)
-        let filters = inputImage.autoAdjustmentFilters() as [CIFilter]
+        let filters = inputImage.autoAdjustmentFilters() as! [CIFilter]
         for filter: CIFilter in filters {
             filter.setValue(inputImage, forKey: kCIInputImageKey)
             inputImage = filter.outputImage

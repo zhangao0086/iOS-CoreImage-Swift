@@ -53,7 +53,7 @@ class ViewController: UIViewController {
         println(filterNames.count)
         println(filterNames)
         for filterName in filterNames {
-            let filter = CIFilter(name: filterName as String)
+            let filter = CIFilter(name: filterName as! String)
             let attributes = filter.attributes()
             println(attributes)
         }

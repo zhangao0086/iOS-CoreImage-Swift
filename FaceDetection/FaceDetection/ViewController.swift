@@ -36,9 +36,9 @@ class ViewController: UIViewController {
             options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
         var faceFeatures: [CIFaceFeature]!
         if let orientation: AnyObject = inputImage.properties()?[kCGImagePropertyOrientation] {
-            faceFeatures = detector.featuresInImage(inputImage, options: [CIDetectorImageOrientation: orientation]) as [CIFaceFeature]
+            faceFeatures = detector.featuresInImage(inputImage, options: [CIDetectorImageOrientation: orientation]) as! [CIFaceFeature]
         } else {
-            faceFeatures = detector.featuresInImage(inputImage) as [CIFaceFeature]
+            faceFeatures = detector.featuresInImage(inputImage)as! [CIFaceFeature]
         }
         
         println(faceFeatures)
