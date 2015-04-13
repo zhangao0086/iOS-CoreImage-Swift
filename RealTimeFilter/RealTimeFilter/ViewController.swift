@@ -51,7 +51,12 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         filterButtonsContainer.hidden = true
         
         self.view.layer.insertSublayer(previewLayer, atIndex: 0)
-        setupCaptureSession()
+        
+        if TARGET_IPHONE_SIMULATOR == 1 {
+            UIAlertView(title: "提示", message: "不支持模拟器", delegate: nil, cancelButtonTitle: "确定").show()
+        } else {
+            setupCaptureSession()
+        }
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
