@@ -1,7 +1,7 @@
 iOS Core Image Swift
 ===================
 
-Updated for Xcode 6.3 with Swift 1.2  
+Updated for Xcode 7 with Swift 2.0  
 ---
 ### 自动改善图像以及内置滤镜的使用
 Auto Enhancing And Simple Filter  
