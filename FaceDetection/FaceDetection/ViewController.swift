@@ -30,21 +30,21 @@ class ViewController: UIViewController {
     }
     // 人脸检测
     @IBAction func faceDetecing() {
-        let inputImage = CIImage(image: originalImage)
+        let inputImage = CIImage(image: originalImage)!
         let detector = CIDetector(ofType: CIDetectorTypeFace,
             context: context,
             options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
         var faceFeatures: [CIFaceFeature]!
-        if let orientation: AnyObject = inputImage.properties()?[kCGImagePropertyOrientation] {
+        if let orientation: AnyObject = inputImage.properties[kCGImagePropertyOrientation as String] {
             faceFeatures = detector.featuresInImage(inputImage, options: [CIDetectorImageOrientation: orientation]) as! [CIFaceFeature]
         } else {
             faceFeatures = detector.featuresInImage(inputImage)as! [CIFaceFeature]
         }
         
-        println(faceFeatures)
+        print(faceFeatures)
         
         // 1.
-        let inputImageSize = inputImage.extent().size
+        let inputImageSize = inputImage.extent.size
         var transform = CGAffineTransformIdentity
         transform = CGAffineTransformScale(transform, 1, -1)
         transform = CGAffineTransformTranslate(transform, 0, -inputImageSize.height)
@@ -53,10 +53,10 @@ class ViewController: UIViewController {
             var faceViewBounds = CGRectApplyAffineTransform(faceFeature.bounds, transform)
             
             // 2.
-            var scale = min(imageView.bounds.size.width / inputImageSize.width,
+            let scale = min(imageView.bounds.size.width / inputImageSize.width,
                 imageView.bounds.size.height / inputImageSize.height)
-            var offsetX = (imageView.bounds.size.width - inputImageSize.width * scale) / 2
-            var offsetY = (imageView.bounds.size.height - inputImageSize.height * scale) / 2
+            let offsetX = (imageView.bounds.size.width - inputImageSize.width * scale) / 2
+            let offsetY = (imageView.bounds.size.height - inputImageSize.height * scale) / 2
             
             faceViewBounds = CGRectApplyAffineTransform(faceViewBounds, CGAffineTransformMakeScale(scale, scale))
             faceViewBounds.origin.x += offsetX
@@ -71,15 +71,16 @@ class ViewController: UIViewController {
     }
     
     // 马赛克
+    @available(iOS 8.0, *)
     @IBAction func pixellated() {
         // 1.
-        var filter = CIFilter(name: "CIPixellate")
-        println(filter.attributes())
-        let inputImage = CIImage(image: originalImage)
+        let filter = CIFilter(name: "CIPixellate")!
+        print(filter.attributes)
+        let inputImage = CIImage(image: originalImage)!
         filter.setValue(inputImage, forKey: kCIInputImageKey)
-        // filter.setValue(max(inputImage.extent().size.width, inputImage.extent().size.height) / 60, forKey: kCIInputScaleKey)
+        // filter.setValue(max(inputImage.extent.size.width, inputImage.extent.size.height) / 60, forKey: kCIInputScaleKey)
         let fullPixellatedImage = filter.outputImage
-        // let cgImage = context.createCGImage(fullPixellatedImage, fromRect: fullPixellatedImage.extent())
+        // let cgImage = context.createCGImage(fullPixellatedImage, fromRect: fullPixellatedImage.extent)
         // imageView.image = UIImage(CGImage: cgImage)
         // 2.
         let detector = CIDetector(ofType: CIDetectorTypeFace,
@@ -88,10 +89,10 @@ class ViewController: UIViewController {
         let faceFeatures = detector.featuresInImage(inputImage)
         // 3.
         var maskImage: CIImage!
-        var scale = min(imageView.bounds.size.width / inputImage.extent().size.width,
-                        imageView.bounds.size.height / inputImage.extent().size.height)
+        let scale = min(imageView.bounds.size.width / inputImage.extent.size.width,
+                        imageView.bounds.size.height / inputImage.extent.size.height)
         for faceFeature in faceFeatures {
-            println(faceFeature.bounds)
+            print(faceFeature.bounds)
             // 4.
             let centerX = faceFeature.bounds.origin.x + faceFeature.bounds.size.width / 2
             let centerY = faceFeature.bounds.origin.y + faceFeature.bounds.size.height / 2
@@ -103,30 +104,31 @@ class ViewController: UIViewController {
                                             "inputColor0" : CIColor(red: 0, green: 1, blue: 0, alpha: 1),
                                             "inputColor1" : CIColor(red: 0, green: 0, blue: 0, alpha: 0),
                                             kCIInputCenterKey : CIVector(x: centerX, y: centerY)
-                ])
-            println(radialGradient.attributes())
+                ])!
+			
+            print(radialGradient.attributes)
             // 5.
-            let radialGradientOutputImage = radialGradient.outputImage.imageByCroppingToRect(inputImage.extent())
+            let radialGradientOutputImage = radialGradient.outputImage!.imageByCroppingToRect(inputImage.extent)
             if maskImage == nil {
                 maskImage = radialGradientOutputImage
             } else {
-                println(radialGradientOutputImage)
+                print(radialGradientOutputImage)
                 maskImage = CIFilter(name: "CISourceOverCompositing",
                     withInputParameters: [
                         kCIInputImageKey : radialGradientOutputImage,
                         kCIInputBackgroundImageKey : maskImage
-                    ]).outputImage
+                    ])!.outputImage
             }
-            println(maskImage.extent())
+            print(maskImage.extent)
         }
         // 6.
-        let blendFilter = CIFilter(name: "CIBlendWithMask")
+        let blendFilter = CIFilter(name: "CIBlendWithMask")!
         blendFilter.setValue(fullPixellatedImage, forKey: kCIInputImageKey)
         blendFilter.setValue(inputImage, forKey: kCIInputBackgroundImageKey)
         blendFilter.setValue(maskImage, forKey: kCIInputMaskImageKey)
         // 7.
-        let blendOutputImage = blendFilter.outputImage
-        let blendCGImage = context.createCGImage(blendOutputImage, fromRect: blendOutputImage.extent())
+        let blendOutputImage = blendFilter.outputImage!
+        let blendCGImage = context.createCGImage(blendOutputImage, fromRect: blendOutputImage.extent)
         imageView.image = UIImage(CGImage: blendCGImage)
     }
 }

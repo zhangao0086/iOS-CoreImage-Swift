@@ -156,12 +156,13 @@
 		9C6B025C19CD3477009FEA30 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = ZhangAo;
 				TargetAttributes = {
 					9C6B026319CD3477009FEA30 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 3XF6FPH7DP;
+						DevelopmentTeam = 8GUYRYTZFL;
 					};
 					9C6B027819CD3477009FEA30 = {
 						CreatedOnToolsVersion = 6.0;
@@ -276,6 +277,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -342,8 +344,9 @@
 				INFOPLIST_FILE = RealTimeFilter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "da06ef12-08f8-4337-a83b-f5ff601dd324";
 			};
 			name = Debug;
 		};
@@ -356,8 +359,9 @@
 				INFOPLIST_FILE = RealTimeFilter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "da06ef12-08f8-4337-a83b-f5ff601dd324";
 			};
 			name = Release;
 		};
@@ -375,6 +379,7 @@
 				);
 				INFOPLIST_FILE = RealTimeFilterTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RealTimeFilter.app/RealTimeFilter";
 			};
@@ -390,6 +395,7 @@
 				);
 				INFOPLIST_FILE = RealTimeFilterTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RealTimeFilter.app/RealTimeFilter";
 			};

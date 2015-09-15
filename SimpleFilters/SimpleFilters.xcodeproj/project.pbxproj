@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C00FAF81BA8302B00B5897F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C00FAF71BA8302B00B5897F /* Launch Screen.storyboard */; };
 		9C9E492019BC449F00D49AB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E491F19BC449F00D49AB6 /* AppDelegate.swift */; };
 		9C9E492219BC449F00D49AB6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E492119BC449F00D49AB6 /* ViewController.swift */; };
 		9C9E492519BC449F00D49AB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C9E492319BC449F00D49AB6 /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C00FAF71BA8302B00B5897F /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		9C9E491A19BC449F00D49AB6 /* SimpleFilters.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleFilters.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9E491E19BC449F00D49AB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C9E491F19BC449F00D49AB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			children = (
 				9C9E491F19BC449F00D49AB6 /* AppDelegate.swift */,
 				9C9E492119BC449F00D49AB6 /* ViewController.swift */,
+				9C00FAF71BA8302B00B5897F /* Launch Screen.storyboard */,
 				9C9E492319BC449F00D49AB6 /* Main.storyboard */,
 				9C9E492619BC449F00D49AB6 /* Images.xcassets */,
 				9C9E491D19BC449F00D49AB6 /* Supporting Files */,
@@ -153,6 +156,7 @@
 		9C9E491219BC449F00D49AB6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = zhangao;
 				TargetAttributes = {
@@ -189,6 +193,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C00FAF81BA8302B00B5897F /* Launch Screen.storyboard in Resources */,
 				9C9E492519BC449F00D49AB6 /* Main.storyboard in Resources */,
 				9C9E492719BC449F00D49AB6 /* Images.xcassets in Resources */,
 			);

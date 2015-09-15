@@ -41,12 +41,12 @@ class ViewController: UIViewController {
     // MARK: -
     func showFiltersInConsole() {
         let filterNames = CIFilter.filterNamesInCategory(kCICategoryColorEffect)
-        println(filterNames.count)
-        println(filterNames)
+        print(filterNames.count)
+        print(filterNames)
         for filterName in filterNames {
-            let filter = CIFilter(name: filterName as! String)
-            let attributes = filter.attributes()
-            println(attributes)
+            let filter = CIFilter(name: filterName)!
+            let attributes = filter.attributes
+            print(attributes)
         }
     }
     
@@ -55,23 +55,23 @@ class ViewController: UIViewController {
     }
     
     func outputImage() {
-        println(filter)
+        print(filter)
         let inputImage = CIImage(image: originalImage)
         filter.setValue(inputImage, forKey: kCIInputImageKey)
-        let outputImage =  filter.outputImage
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent())
+        let outputImage =  filter.outputImage!
+        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent)
         self.imageView.image = UIImage(CGImage: cgImage)
     }
     
     // MARK: - 自动改善
     @IBAction func autoAdjust() {
-        var inputImage = CIImage(image: originalImage)
-        let filters = inputImage.autoAdjustmentFilters() as! [CIFilter]
+        var inputImage = CIImage(image: originalImage)!
+        let filters = inputImage.autoAdjustmentFiltersWithOptions(nil)
         for filter: CIFilter in filters {
             filter.setValue(inputImage, forKey: kCIInputImageKey)
-            inputImage = filter.outputImage
+            inputImage = filter.outputImage!
         }
-        let cgImage = context.createCGImage(inputImage, fromRect: inputImage.extent())
+        let cgImage = context.createCGImage(inputImage, fromRect: inputImage.extent)
         self.imageView.image = UIImage(CGImage: cgImage)
     }
     
