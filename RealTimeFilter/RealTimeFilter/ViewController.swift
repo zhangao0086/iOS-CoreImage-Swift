@@ -370,6 +370,9 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             print(faceLayer!.bounds)
             */
         }
+        else{
+            faceObject = nil
+        }
     }
 }
 
