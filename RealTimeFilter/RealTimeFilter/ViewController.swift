@@ -12,6 +12,7 @@ import AssetsLibrary
 
 class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDelegate , AVCaptureMetadataOutputObjectsDelegate {
     @IBOutlet var filterButtonsContainer: UIView!
+    @IBOutlet var switchCameraButton:UIButton!
     var captureSession: AVCaptureSession!
     var previewLayer: CALayer!
     var filter: CIFilter!
@@ -36,7 +37,8 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     var isWriting = false
     var currentSampleTime: CMTime?
     var currentVideoDimensions: CMVideoDimensions?
-    
+    var currentDeviceInput:AVCaptureDeviceInput?
+    var currentDevice:AVCaptureDevice?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +51,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         previewLayer.bounds = view.bounds
         
         filterButtonsContainer.hidden = true
+        switchCameraButton.hidden = true   //两个摄像头可用的时候可以切换摄像头
         
         self.view.layer.insertSublayer(previewLayer, atIndex: 0)
         
@@ -74,9 +77,18 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         captureSession.sessionPreset = AVCaptureSessionPresetHigh
 		
-		let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
 		
+        let captureDevices  = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        guard let captureDevice = captureDevices.first as? AVCaptureDevice else{
+            assert(false, "没可用的摄像头")
+            return
+        }
+        
+        currentDevice  = captureDevice
+        
 		let deviceInput = try! AVCaptureDeviceInput(device: captureDevice)
+        currentDeviceInput = deviceInput
+        
 		if captureSession.canAddInput(deviceInput) {
 			captureSession.addInput(deviceInput)
 		}
@@ -104,11 +116,57 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         captureSession.commitConfiguration()
     }
-
+    
+    func captureDevice(postion:AVCaptureDevicePosition = .Front,anyDevice:Bool = true) -> AVCaptureDevice{
+        let captureDevices  = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        var device = captureDevices.first as? AVCaptureDevice
+        
+        if anyDevice {
+            return device!
+        }
+        for  device_ in captureDevices {
+            if device_.position == postion{
+                device = device_ as? AVCaptureDevice
+                break
+            }
+        }
+        return device!;
+    }
+    
+    // MARK: 点击切换按钮切换镜头
+    @IBAction func clickSwitchCameraButton(sender:UIButton){
+        if let  deviceInput =  currentDeviceInput{
+            let animation = CATransition.init()
+            animation.duration = 0.25
+            animation.subtype = kCATruncationMiddle
+            animation.type =  kCATransitionFade
+            captureSession.removeInput(deviceInput)
+            switch currentDevice!.position {
+            case .Back:
+                currentDevice =  captureDevice(.Front,anyDevice: false)
+            case .Front:
+                currentDevice =  captureDevice(.Back,anyDevice: false)
+            case .Unspecified:
+                break
+            }
+            currentDeviceInput =  try! AVCaptureDeviceInput.init(device: currentDevice)
+            captureSession.addInput(currentDeviceInput)
+            self.view.layer .addAnimation(animation, forKey: nil)
+            faceObject = nil
+        }else{
+            currentDevice =  captureDevice()
+            currentDeviceInput =  try! AVCaptureDeviceInput.init(device: currentDevice)
+            captureSession.addInput(currentDeviceInput)
+        }
+    }
+    
     @IBAction func openCamera(sender: UIButton) {
         sender.enabled = false
         captureSession.startRunning()
         self.filterButtonsContainer.hidden = false
+        let captureDevices  = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        switchCameraButton.hidden = captureDevices.count < 1
+        
     }
     
     @IBAction func applyFilter(sender: UIButton) {
