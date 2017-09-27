@@ -1,96 +1,128 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="vXZ-lx-hvc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="RealTimeFilter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fsR-a3-ZUO"/>
+                        <viewControllerLayoutGuide type="bottom" id="l0M-o1-9l2"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Vk9-X0-6E5">
-                                <rect key="frame" x="16" y="518" width="94" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <state key="normal" title="打开相机">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="openCamera:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="gO3-hy-8jd"/>
-                                </connections>
-                            </button>
-                            <view contentMode="scaleToFill" id="54x-c8-CZs">
-                                <rect key="frame" x="0.0" y="470" width="320" height="40"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="54x-c8-CZs">
+                                <rect key="frame" x="0.0" y="569" width="375" height="40"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fjb-Pi-g0p">
-                                        <rect key="frame" x="0.0" y="5" width="80" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fjb-Pi-g0p">
+                                        <rect key="frame" x="0.0" y="0.0" width="94" height="40"/>
                                         <state key="normal" title="反色">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="applyFilter:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="0NQ-SY-b5C"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Lc0-56-t77">
-                                        <rect key="frame" x="80" y="5" width="80" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-56-t77">
+                                        <rect key="frame" x="94" y="0.0" width="93.5" height="40"/>
                                         <state key="normal" title="单色">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="applyFilter:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="f5C-YT-9gR"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jQJ-nT-Hps">
-                                        <rect key="frame" x="240" y="5" width="80" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jQJ-nT-Hps">
+                                        <rect key="frame" x="281.5" y="0.0" width="93.5" height="40"/>
                                         <state key="normal" title="岁月">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="applyFilter:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="jNw-lL-rh1"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lGd-DF-aP6">
-                                        <rect key="frame" x="160" y="5" width="80" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGd-DF-aP6">
+                                        <rect key="frame" x="187.5" y="0.0" width="94" height="40"/>
                                         <state key="normal" title="怀旧">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="applyFilter:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="qsj-BC-2ez"/>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="jQJ-nT-Hps" secondAttribute="bottom" id="HdG-Ga-fbX"/>
+                                    <constraint firstItem="lGd-DF-aP6" firstAttribute="height" secondItem="jQJ-nT-Hps" secondAttribute="height" id="JK0-42-hO8"/>
+                                    <constraint firstItem="Lc0-56-t77" firstAttribute="width" secondItem="lGd-DF-aP6" secondAttribute="width" id="K8E-AZ-LSD"/>
+                                    <constraint firstItem="Lc0-56-t77" firstAttribute="leading" secondItem="fjb-Pi-g0p" secondAttribute="trailing" id="QxA-G7-03a"/>
+                                    <constraint firstItem="lGd-DF-aP6" firstAttribute="leading" secondItem="Lc0-56-t77" secondAttribute="trailing" id="QyZ-71-w5k"/>
+                                    <constraint firstItem="Lc0-56-t77" firstAttribute="top" secondItem="lGd-DF-aP6" secondAttribute="top" id="SYD-Yq-FXA"/>
+                                    <constraint firstAttribute="height" constant="40" id="Xqn-lt-4Dd"/>
+                                    <constraint firstItem="fjb-Pi-g0p" firstAttribute="top" secondItem="54x-c8-CZs" secondAttribute="top" id="Yqk-KX-nX7"/>
+                                    <constraint firstItem="lGd-DF-aP6" firstAttribute="width" secondItem="jQJ-nT-Hps" secondAttribute="width" id="Zfr-Wn-vrq"/>
+                                    <constraint firstAttribute="bottom" secondItem="fjb-Pi-g0p" secondAttribute="bottom" id="elj-E7-n57"/>
+                                    <constraint firstItem="lGd-DF-aP6" firstAttribute="top" secondItem="jQJ-nT-Hps" secondAttribute="top" id="g5Z-DV-PyA"/>
+                                    <constraint firstAttribute="trailing" secondItem="jQJ-nT-Hps" secondAttribute="trailing" id="hUr-Gy-LzT"/>
+                                    <constraint firstItem="jQJ-nT-Hps" firstAttribute="top" secondItem="54x-c8-CZs" secondAttribute="top" id="mcU-gq-mDb"/>
+                                    <constraint firstItem="fjb-Pi-g0p" firstAttribute="width" secondItem="Lc0-56-t77" secondAttribute="width" id="sNA-Zf-y9R"/>
+                                    <constraint firstItem="jQJ-nT-Hps" firstAttribute="leading" secondItem="lGd-DF-aP6" secondAttribute="trailing" id="vM9-CO-XqH"/>
+                                    <constraint firstItem="fjb-Pi-g0p" firstAttribute="leading" secondItem="54x-c8-CZs" secondAttribute="leading" id="zKU-Va-FOh"/>
+                                    <constraint firstItem="Lc0-56-t77" firstAttribute="height" secondItem="lGd-DF-aP6" secondAttribute="height" id="zTw-Q3-MdR"/>
+                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="f6I-f8-jkJ">
-                                <rect key="frame" x="118" y="518" width="69" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6I-f8-jkJ">
+                                <rect key="frame" x="172" y="617" width="31" height="30"/>
                                 <state key="normal" title="拍照">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="takePicture:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Sln-Lu-8CB"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2zl-oR-5ho">
-                                <rect key="frame" x="195" y="518" width="109" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2zl-oR-5ho">
+                                <rect key="frame" x="297" y="617" width="62" height="30"/>
                                 <state key="normal" title="开始录制">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="record" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3YS-Qb-7ja"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vk9-X0-6E5">
+                                <rect key="frame" x="16" y="617" width="62" height="30"/>
+                                <state key="normal" title="打开相机">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="openCameraWithSender:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="YX0-rK-jHb"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="f6I-f8-jkJ" firstAttribute="top" secondItem="54x-c8-CZs" secondAttribute="bottom" constant="8" id="DFV-vh-mCz"/>
+                            <constraint firstItem="f6I-f8-jkJ" firstAttribute="centerY" secondItem="Vk9-X0-6E5" secondAttribute="centerY" id="JgU-r0-WOT"/>
+                            <constraint firstItem="f6I-f8-jkJ" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="PMI-YN-mLe"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2zl-oR-5ho" secondAttribute="trailing" id="PTc-a6-qO4"/>
+                            <constraint firstAttribute="trailing" secondItem="54x-c8-CZs" secondAttribute="trailing" id="THO-sF-QgK"/>
+                            <constraint firstItem="2zl-oR-5ho" firstAttribute="bottom" secondItem="Vk9-X0-6E5" secondAttribute="bottom" id="Ubc-fM-2HT"/>
+                            <constraint firstItem="l0M-o1-9l2" firstAttribute="top" secondItem="Vk9-X0-6E5" secondAttribute="bottom" constant="20" id="XcG-Bj-pJu"/>
+                            <constraint firstItem="Vk9-X0-6E5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="YpK-je-3bD"/>
+                            <constraint firstItem="2zl-oR-5ho" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="eSM-gC-4sn"/>
+                            <constraint firstItem="54x-c8-CZs" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="zxZ-J0-5ug"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="filterButtonsContainer" destination="54x-c8-CZs" id="2TL-xF-7L7"/>
@@ -99,12 +131,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="301" y="305"/>
+            <point key="canvasLocation" x="481.60000000000002" y="274.36281859070465"/>
         </scene>
     </scenes>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

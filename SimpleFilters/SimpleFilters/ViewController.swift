@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         self.imageView.layer.shadowOpacity = 0.8
-        self.imageView.layer.shadowColor = UIColor.blackColor().CGColor
+        self.imageView.layer.shadowColor = UIColor.black.cgColor
         self.imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
         
         self.imageView.image = originalImage
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     
     // MARK: -
     func showFiltersInConsole() {
-        let filterNames = CIFilter.filterNamesInCategory(kCICategoryColorEffect)
+        let filterNames = CIFilter.filterNames(inCategory: kCICategoryColorEffect)
         print(filterNames.count)
         print(filterNames)
         for filterName in filterNames {
@@ -59,20 +59,22 @@ class ViewController: UIViewController {
         let inputImage = CIImage(image: originalImage)
         filter.setValue(inputImage, forKey: kCIInputImageKey)
         let outputImage =  filter.outputImage!
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent)
-        self.imageView.image = UIImage(CGImage: cgImage)
+        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+            self.imageView.image = UIImage(cgImage: cgImage)
+        }
     }
     
     // MARK: - 自动改善
     @IBAction func autoAdjust() {
         var inputImage = CIImage(image: originalImage)!
-        let filters = inputImage.autoAdjustmentFiltersWithOptions(nil)
+        let filters = inputImage.autoAdjustmentFilters(options: nil)
         for filter: CIFilter in filters {
             filter.setValue(inputImage, forKey: kCIInputImageKey)
             inputImage = filter.outputImage!
         }
-        let cgImage = context.createCGImage(inputImage, fromRect: inputImage.extent)
-        self.imageView.image = UIImage(CGImage: cgImage)
+        if let cgImage = context.createCGImage(inputImage, from: inputImage.extent) {
+            self.imageView.image = UIImage(cgImage: cgImage)
+        }
     }
     
     // MARK: - 怀旧

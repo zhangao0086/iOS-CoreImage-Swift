@@ -16,12 +16,12 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     var previewLayer: CALayer!
     var filter: CIFilter!
     lazy var context: CIContext = {
-        let eaglContext = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
+        let eaglContext = EAGLContext(api: .openGLES2)
         let options = [kCIContextWorkingColorSpace : NSNull()]
-        return CIContext(EAGLContext: eaglContext, options: options)
+        return CIContext(eaglContext: eaglContext!, options: options)
     }()
     lazy var filterNames: [String] = {
-        return ["CIColorInvert","CIPhotoEffectMono","CIPhotoEffectInstant","CIPhotoEffectTransfer"]
+        return ["CIColorInvert", "CIPhotoEffectMono", "CIPhotoEffectInstant", "CIPhotoEffectTransfer"]
     }()
     var ciImage: CIImage!
     
@@ -42,24 +42,25 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         super.viewDidLoad()
         
         previewLayer = CALayer()
-        // previewLayer.bounds = CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width);
-        // previewLayer.position = CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height / 2.0);
-        // previewLayer.setAffineTransform(CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0)));
-        previewLayer.anchorPoint = CGPointZero
+        // previewLayer.bounds = CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)
+        // previewLayer.position = CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height / 2.0)
+        // previewLayer.setAffineTransform(CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0)))
+        previewLayer.anchorPoint = CGPoint.zero
         previewLayer.bounds = view.bounds
         
-        filterButtonsContainer.hidden = true
+        filterButtonsContainer.isHidden = true
         
-        self.view.layer.insertSublayer(previewLayer, atIndex: 0)
+        self.view.layer.insertSublayer(previewLayer, at: 0)
         
-        if TARGET_IPHONE_SIMULATOR == 1 {
-            UIAlertView(title: "提示", message: "不支持模拟器", delegate: nil, cancelButtonTitle: "确定").show()
+        if TARGET_OS_SIMULATOR != 0 {
+            let alert = UIAlertController(title: "提示", message: "不支持模拟器", preferredStyle: .alert)
+            self.present(alert, animated: true, completion: nil)
         } else {
             setupCaptureSession()
         }
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         previewLayer.bounds.size = size
     }
 
@@ -72,43 +73,42 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
         
-        captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        captureSession.sessionPreset = .high
 		
-		let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let captureDevice = AVCaptureDevice.default(for: .video)
 		
-		let deviceInput = try! AVCaptureDeviceInput(device: captureDevice)
+        let deviceInput = try! AVCaptureDeviceInput(device: captureDevice!)
 		if captureSession.canAddInput(deviceInput) {
 			captureSession.addInput(deviceInput)
 		}
 		
         let dataOutput = AVCaptureVideoDataOutput()
-		dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(kCVPixelFormatType_32BGRA)]
+        dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_32BGRA)]
         dataOutput.alwaysDiscardsLateVideoFrames = true
         
         if captureSession.canAddOutput(dataOutput) {
             captureSession.addOutput(dataOutput)
         }
         
-        let queue = dispatch_queue_create("VideoQueue", DISPATCH_QUEUE_SERIAL)
-        dataOutput.setSampleBufferDelegate(self, queue: queue)
+        dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "VideoQueue"))
         
         // 为了检测人脸
         let metadataOutput = AVCaptureMetadataOutput()
-        metadataOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+        metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
         
         if captureSession.canAddOutput(metadataOutput) {
             captureSession.addOutput(metadataOutput)
             print(metadataOutput.availableMetadataObjectTypes)
-            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeFace]
+            metadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.face]
         }
         
         captureSession.commitConfiguration()
     }
 
     @IBAction func openCamera(sender: UIButton) {
-        sender.enabled = false
+        sender.isEnabled = false
         captureSession.startRunning()
-        self.filterButtonsContainer.hidden = false
+        self.filterButtonsContainer.isHidden = false
     }
     
     @IBAction func applyFilter(sender: UIButton) {
@@ -120,21 +120,20 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         if ciImage == nil || isWriting {
             return
         }
-        sender.enabled = false
+        sender.isEnabled = false
         captureSession.stopRunning()
 
-        let cgImage = context.createCGImage(ciImage, fromRect: ciImage.extent)
-        ALAssetsLibrary().writeImageToSavedPhotosAlbum(cgImage, metadata: ciImage.properties)
-            {(url: NSURL!, error :NSError!) -> Void in
-                if error == nil {
-                    print("保存成功")
-                    print(url)
-                } else {
-                    let alert = UIAlertView(title: "错误", message: error.localizedDescription, delegate: nil, cancelButtonTitle: "确定")
-                    alert.show()
-                }
-                self.captureSession.startRunning()
-                sender.enabled = true
+        let cgImage = context.createCGImage(ciImage, from: ciImage.extent)
+        ALAssetsLibrary().writeImage(toSavedPhotosAlbum: cgImage, metadata: ciImage.properties) { (url, error) in
+            if error == nil {
+                print("保存成功")
+                print(url!)
+            } else {
+                let alert = UIAlertController(title: "错误", message: error?.localizedDescription, preferredStyle: .alert)
+                self.present(alert, animated: true, completion: nil)
+            }
+            self.captureSession.startRunning()
+            sender.isEnabled = true
         }
     }
     
@@ -143,49 +142,52 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         if isWriting {
             self.isWriting = false
             assetWriterPixelBufferInput = nil
-            recordsButton.enabled = false
-            assetWriter?.finishWritingWithCompletionHandler({[unowned self] () -> Void in
+            recordsButton.isEnabled = false
+            assetWriter?.finishWriting(completionHandler: {[unowned self] () -> Void in
                 print("录制完成")
-                self.recordsButton.setTitle("处理中...", forState: UIControlState.Normal)
+                self.recordsButton.setTitle("处理中...", for: .normal)
                 self.saveMovieToCameraRoll()
             })
         } else {
             createWriter()
-            recordsButton.setTitle("停止录制...", forState: UIControlState.Normal)
+            recordsButton.setTitle("停止录制...", for: .normal)
             assetWriter?.startWriting()
-            assetWriter?.startSessionAtSourceTime(currentSampleTime!)
+            assetWriter?.startSession(atSourceTime: currentSampleTime!)
             isWriting = true
         }
     }
     
     func saveMovieToCameraRoll() {
-        ALAssetsLibrary().writeVideoAtPathToSavedPhotosAlbum(movieURL(), completionBlock: { (url: NSURL!, error: NSError?) -> Void in
+        ALAssetsLibrary().writeVideoAtPath(toSavedPhotosAlbum: movieURL() as URL!) { (url, error) in
             if let errorDescription = error?.localizedDescription {
                 print("写入视频错误：\(errorDescription)")
             } else {
                 self.checkForAndDeleteFile()
                 print("写入视频成功")
             }
-            self.recordsButton.enabled = true
-            self.recordsButton.setTitle("开始录制", forState: UIControlState.Normal)
-        })
+            
+            DispatchQueue.main.async {
+                self.recordsButton.isEnabled = true
+                self.recordsButton.setTitle("开始录制", for: .normal)
+            }
+        }
     }
     
     func movieURL() -> NSURL {
         let tempDir = NSTemporaryDirectory()
-		let url = NSURL(fileURLWithPath: tempDir).URLByAppendingPathComponent("tmpMov.mov")
-        return url
+        let url = NSURL(fileURLWithPath: tempDir).appendingPathComponent("tmpMov.mov")
+        return url! as NSURL
     }
     
     func checkForAndDeleteFile() {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         let url = movieURL()
-        let exist = fm.fileExistsAtPath(url.path!)
+        let exist = fm.fileExists(atPath: url.path!)
 		
         if exist {
 			print("删除之前的临时文件")
 			do {
-				try fm.removeItemAtURL(url)
+                try fm.removeItem(at: url as URL)
 			} catch let error as NSError {
 				print(error.localizedDescription)
 			}
@@ -196,7 +198,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         self.checkForAndDeleteFile()
 		
 		do {
-			assetWriter = try AVAssetWriter(URL: movieURL(), fileType: AVFileTypeQuickTimeMovie)
+            assetWriter = try AVAssetWriter(outputURL: movieURL() as URL, fileType: AVFileType.mov)
 		} catch let error as NSError {
 			print("创建writer失败")
 			print(error.localizedDescription)
@@ -207,24 +209,24 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             AVVideoCodecKey : AVVideoCodecH264,
             AVVideoWidthKey : Int(currentVideoDimensions!.width),
             AVVideoHeightKey : Int(currentVideoDimensions!.height)
-        ]
+            ] as [String : Any]
 		
-        let assetWriterVideoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: outputSettings as? [String : AnyObject])
+        let assetWriterVideoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: outputSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
-        assetWriterVideoInput.transform = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
+        assetWriterVideoInput.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2.0)
 		
 		let sourcePixelBufferAttributesDictionary = [
             String(kCVPixelBufferPixelFormatTypeKey) : Int(kCVPixelFormatType_32BGRA),
             String(kCVPixelBufferWidthKey) : Int(currentVideoDimensions!.width),
             String(kCVPixelBufferHeightKey) : Int(currentVideoDimensions!.height),
             String(kCVPixelFormatOpenGLESCompatibility) : kCFBooleanTrue
-		]
+        ] as [String : Any]
 		
         assetWriterPixelBufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
                                                 sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
         
-        if assetWriter!.canAddInput(assetWriterVideoInput) {
-            assetWriter!.addInput(assetWriterVideoInput)
+        if assetWriter!.canAdd(assetWriterVideoInput) {
+            assetWriter!.add(assetWriterVideoInput)
         } else {
             print("不能添加视频writer的input \(assetWriterVideoInput)")
         }
@@ -254,7 +256,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
                 kCIInputCenterKey : CIVector(x: centerX, y: centerY)
             ])!
 
-        let radialGradientOutputImage = radialGradient.outputImage!.imageByCroppingToRect(inputImage.extent)
+        let radialGradientOutputImage = radialGradient.outputImage!.cropped(to: inputImage.extent)
         if maskImage == nil {
             maskImage = radialGradientOutputImage
         } else {
@@ -275,7 +277,8 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     }
     
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
-    func captureOutput(captureOutput: AVCaptureOutput!,didOutputSampleBuffer sampleBuffer: CMSampleBuffer!,fromConnection connection: AVCaptureConnection!) {
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         autoreleasepool {
             let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
             
@@ -292,26 +295,26 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             // let grayColorSpace = CGColorSpaceCreateDeviceGray()
             // let context = CGBitmapContextCreate(lumaBuffer, width, height, 8, bytesPerRow, grayColorSpace, CGBitmapInfo.allZeros)
             // let cgImage = CGBitmapContextCreateImage(context)
-            var outputImage = CIImage(CVPixelBuffer: imageBuffer)
+            var outputImage = CIImage(cvImageBuffer: imageBuffer)
             
             if self.filter != nil {
                 self.filter.setValue(outputImage, forKey: kCIInputImageKey)
                 outputImage = self.filter.outputImage!
             }
             if self.faceObject != nil {
-                outputImage = self.makeFaceWithCIImage(outputImage, faceObject: self.faceObject!)
+                outputImage = self.makeFaceWithCIImage(inputImage: outputImage, faceObject: self.faceObject!)
             }
             
             // 录制视频的处理
             if self.isWriting {
-                if self.assetWriterPixelBufferInput?.assetWriterInput.readyForMoreMediaData == true {
+                if self.assetWriterPixelBufferInput?.assetWriterInput.isReadyForMoreMediaData == true {
                     var newPixelBuffer: CVPixelBuffer? = nil
 					
                     CVPixelBufferPoolCreatePixelBuffer(nil, self.assetWriterPixelBufferInput!.pixelBufferPool!, &newPixelBuffer)
                     
-                    self.context.render(outputImage, toCVPixelBuffer: newPixelBuffer!, bounds: outputImage.extent, colorSpace: nil)
+                    self.context.render(outputImage, to: newPixelBuffer!, bounds: outputImage.extent, colorSpace: nil)
                     
-                    let success = self.assetWriterPixelBufferInput?.appendPixelBuffer(newPixelBuffer!, withPresentationTime: self.currentSampleTime!)
+                    let success = self.assetWriterPixelBufferInput?.append(newPixelBuffer!, withPresentationTime: self.currentSampleTime!)
                     
                     if success == false {
                         print("Pixel Buffer没有附加成功")
@@ -319,30 +322,31 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
                 }
             }
             
-            let orientation = UIDevice.currentDevice().orientation
+            let orientation = UIDevice.current.orientation
             var t: CGAffineTransform!
-            if orientation == UIDeviceOrientation.Portrait {
-                t = CGAffineTransformMakeRotation(CGFloat(-M_PI / 2.0))
-            } else if orientation == UIDeviceOrientation.PortraitUpsideDown {
-                t = CGAffineTransformMakeRotation(CGFloat(M_PI / 2.0))
-            } else if (orientation == UIDeviceOrientation.LandscapeRight) {
-                t = CGAffineTransformMakeRotation(CGFloat(M_PI))
+            if orientation == UIDeviceOrientation.portrait {
+                t = CGAffineTransform(rotationAngle: -CGFloat.pi / 2.0)
+            } else if orientation == UIDeviceOrientation.portraitUpsideDown {
+                t = CGAffineTransform(rotationAngle: CGFloat.pi / 2.0)
+            } else if (orientation == UIDeviceOrientation.landscapeRight) {
+                t = CGAffineTransform(rotationAngle: CGFloat.pi)
             } else {
-                t = CGAffineTransformMakeRotation(0)
+                t = CGAffineTransform(rotationAngle: 0)
             }
-            outputImage = outputImage.imageByApplyingTransform(t)
+            outputImage = outputImage.transformed(by: t)
             
-            let cgImage = self.context.createCGImage(outputImage, fromRect: outputImage.extent)
+            let cgImage = self.context.createCGImage(outputImage, from: outputImage.extent)
             self.ciImage = outputImage
             
-            dispatch_sync(dispatch_get_main_queue(), {
+            DispatchQueue.main.async {
                 self.previewLayer.contents = cgImage
-            })
+            }
         }
     }
     
     // MARK: - AVCaptureMetadataOutputObjectsDelegate
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
+    
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         // print(metadataObjects)
         if metadataObjects.count > 0 {
             //识别到的第一张脸

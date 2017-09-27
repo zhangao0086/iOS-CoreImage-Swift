@@ -25,19 +25,19 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         imageView.layer.shadowOpacity = 0.8
-        imageView.layer.shadowColor = UIColor.blackColor().CGColor
+        imageView.layer.shadowColor = UIColor.black.cgColor
         imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
         
-        slider.maximumValue = Float(M_PI)
-        slider.minimumValue = Float(-M_PI)
+        slider.maximumValue = Float.pi
+        slider.minimumValue = -Float.pi
         slider.value = 0
-        slider.addTarget(self, action: "valueChanged", forControlEvents: UIControlEvents.ValueChanged)
+        slider.addTarget(self, action: #selector(ViewController.valueChanged), for: .valueChanged)
 
         let inputImage = CIImage(image: originalImage)
         filter = CIFilter(name: "CIHueAdjust")
         filter.setValue(inputImage, forKey: kCIInputImageKey)
 
-        slider.sendActionsForControlEvents(UIControlEvents.ValueChanged)
+        slider.sendActions(for: .valueChanged)
 
         showFiltersInConsole()
     }
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
 
     // MARK: -
     func showFiltersInConsole() {
-        let filterNames = CIFilter.filterNamesInCategory(kCICategoryBuiltIn)
+        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
         print(filterNames.count)
         print(filterNames)
         for filterName in filterNames {
@@ -63,8 +63,9 @@ class ViewController: UIViewController {
         print(slider.value)
         filter.setValue(slider.value, forKey: kCIInputAngleKey)
         let outputImage = filter.outputImage!
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent)
-        imageView.image = UIImage(CGImage: cgImage)
+        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+            imageView.image = UIImage(cgImage: cgImage)
+        }
     }
     
     @IBAction func oldFilmEffect() {
@@ -75,7 +76,7 @@ class ViewController: UIViewController {
         sepiaToneFilter.setValue(1, forKey: kCIInputIntensityKey)
         // 2.创建白班图滤镜
         let whiteSpecksFilter = CIFilter(name: "CIColorMatrix")!
-        whiteSpecksFilter.setValue(CIFilter(name: "CIRandomGenerator")!.outputImage!.imageByCroppingToRect(inputImage.extent), forKey: kCIInputImageKey)
+        whiteSpecksFilter.setValue(CIFilter(name: "CIRandomGenerator")!.outputImage!.cropped(to: inputImage.extent), forKey: kCIInputImageKey)
         whiteSpecksFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputRVector")
         whiteSpecksFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputGVector")
         whiteSpecksFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputBVector")
@@ -87,8 +88,8 @@ class ViewController: UIViewController {
         // ---------上面算是完成了一半
         // 4.用CIAffineTransform滤镜先对随机噪点图进行处理
         let affineTransformFilter = CIFilter(name: "CIAffineTransform")!
-        affineTransformFilter.setValue(CIFilter(name: "CIRandomGenerator")!.outputImage!.imageByCroppingToRect(inputImage.extent), forKey: kCIInputImageKey)
-        affineTransformFilter.setValue(NSValue(CGAffineTransform: CGAffineTransformMakeScale(1.5, 25)), forKey: kCIInputTransformKey)
+        affineTransformFilter.setValue(CIFilter(name: "CIRandomGenerator")!.outputImage!.cropped(to: inputImage.extent), forKey: kCIInputImageKey)
+        affineTransformFilter.setValue(NSValue(cgAffineTransform: CGAffineTransform(scaleX: 1.5, y: 25)), forKey: kCIInputTransformKey)
         // 5.创建蓝绿色磨砂图滤镜
         let darkScratchesFilter = CIFilter(name: "CIColorMatrix")!
         darkScratchesFilter.setValue(affineTransformFilter.outputImage, forKey: kCIInputImageKey)
@@ -107,17 +108,18 @@ class ViewController: UIViewController {
         multiplyCompositingFilter.setValue(sourceOverCompositingFilter.outputImage, forKey: kCIInputImageKey)
         // 8.最后输出
         let outputImage = multiplyCompositingFilter.outputImage!
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent)
-        imageView.image = UIImage(CGImage: cgImage)
+        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+            imageView.image = UIImage(cgImage: cgImage)
+        }
     }
     
     @IBAction func colorInvert() {
         let colorInvertFilter = CIColorInvert()
         colorInvertFilter.inputImage = CIImage(image: imageView.image!)
-        let outputImage = colorInvertFilter.outputImage
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent)
-        imageView.image = UIImage(CGImage: cgImage)
         
+        if let outputImage = colorInvertFilter.outputImage, let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+            imageView.image = UIImage(cgImage: cgImage)
+        }
     }
     
     @IBAction func showOriginalImage() {
@@ -129,7 +131,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func replaceBackground() {
-        let cubeMap = createCubeMap(60,90)
+        let cubeMap = createCubeMap(60, 90)
         let data = NSData(bytesNoCopy: cubeMap.data, length: Int(cubeMap.length), freeWhenDone: true)
         let colorCubeFilter = CIFilter(name: "CIColorCube")!
         
@@ -143,8 +145,9 @@ class ViewController: UIViewController {
         sourceOverCompositingFilter.setValue(CIImage(image: UIImage(named: "background")!), forKey: kCIInputBackgroundImageKey)
 
         outputImage = sourceOverCompositingFilter.outputImage!
-        let cgImage = context.createCGImage(outputImage, fromRect: outputImage.extent)
-        imageView.image = UIImage(CGImage: cgImage)
+        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+            imageView.image = UIImage(cgImage: cgImage)
+        }
         
     }
 }

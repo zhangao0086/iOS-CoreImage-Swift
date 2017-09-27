@@ -5,9 +5,8 @@
 //  Created by ZhangAo on 14-9-10.
 //  Copyright (c) 2014年 zhangao. All rights reserved.
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+
+#include "CubeMap.h"
 
 void rgbToHSV(float *rgb, float *hsv) {
     float min, max, delta;
@@ -35,12 +34,6 @@ void rgbToHSV(float *rgb, float *hsv) {
     if( *h < 0 )
         *h += 360;
 }
-
-struct CubeMap {
-    int length;
-    float dimension;
-    float *data;
-};
 
 struct CubeMap createCubeMap(float minHueAngle, float maxHueAngle) {
     const unsigned int size = 64;
