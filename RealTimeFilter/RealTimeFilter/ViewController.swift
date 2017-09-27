@@ -12,7 +12,7 @@ import AssetsLibrary
 
 class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDelegate , AVCaptureMetadataOutputObjectsDelegate {
     @IBOutlet var filterButtonsContainer: UIView!
-    @IBOutlet var switchCameraButton:UIButton!
+    @IBOutlet var switchCameraButton: UIButton!
     var captureSession: AVCaptureSession!
     var previewLayer: CALayer!
     var filter: CIFilter!
@@ -37,8 +37,8 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     var isWriting = false
     var currentSampleTime: CMTime?
     var currentVideoDimensions: CMVideoDimensions?
-    var currentDeviceInput:AVCaptureDeviceInput?
-    var currentDevice:AVCaptureDevice?
+    var currentDeviceInput: AVCaptureDeviceInput?
+    var currentDevice: AVCaptureDevice?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +51,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         previewLayer.bounds = view.bounds
         
         filterButtonsContainer.isHidden = true
+        switchCameraButton.isHidden = true // 两个摄像头可用的时候可以切换摄像头
         
         self.view.layer.insertSublayer(previewLayer, at: 0)
         
@@ -76,14 +77,15 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         captureSession.beginConfiguration()
         
         captureSession.sessionPreset = .high
-		
-        let captureDevice = AVCaptureDevice.default(for: .video)
-		
-        let deviceInput = try! AVCaptureDeviceInput(device: captureDevice!)
-		if captureSession.canAddInput(deviceInput) {
-			captureSession.addInput(deviceInput)
-		}
-		
+        
+        self.currentDevice = AVCaptureDevice.default(for: .video)
+        let deviceInput = try! AVCaptureDeviceInput(device: self.currentDevice!)
+        if captureSession.canAddInput(deviceInput) {
+            captureSession.addInput(deviceInput)
+            
+            self.currentDeviceInput = deviceInput
+        }
+        
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_32BGRA)]
         dataOutput.alwaysDiscardsLateVideoFrames = true
@@ -107,16 +109,17 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         captureSession.commitConfiguration()
     }
     
-    func captureDevice(postion:AVCaptureDevicePosition = .Front,anyDevice:Bool = true) -> AVCaptureDevice{
-        let captureDevices  = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        var device = captureDevices.first as? AVCaptureDevice
-        
+    func captureDevice(postion: AVCaptureDevice.Position = .front, anyDevice :Bool = true) -> AVCaptureDevice{
+        let captureDevices = AVCaptureDevice.devices(for: .video)
+        var device = captureDevices.first
+
         if anyDevice {
             return device!
         }
-        for  device_ in captureDevices {
-            if device_.position == postion{
-                device = device_ as? AVCaptureDevice
+        
+        for captureDevice in captureDevices {
+            if captureDevice.position == postion{
+                device = captureDevice
                 break
             }
         }
@@ -124,36 +127,41 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     }
     
     // MARK: 点击切换按钮切换镜头
-    @IBAction func clickSwitchCameraButton(sender:UIButton){
-        if let  deviceInput =  currentDeviceInput{
-            let animation = CATransition.init()
-            animation.duration = 0.25
-            animation.subtype = kCATruncationMiddle
-            animation.type =  kCATransitionFade
-            captureSession.removeInput(deviceInput)
-            switch currentDevice!.position {
-            case .Back:
-                currentDevice =  captureDevice(.Front,anyDevice: false)
-            case .Front:
-                currentDevice =  captureDevice(.Back,anyDevice: false)
-            case .Unspecified:
-                break
-            }
-            currentDeviceInput =  try! AVCaptureDeviceInput.init(device: currentDevice)
-            captureSession.addInput(currentDeviceInput)
-            self.view.layer .addAnimation(animation, forKey: nil)
-            faceObject = nil
-        }else{
-            currentDevice =  captureDevice()
-            currentDeviceInput =  try! AVCaptureDeviceInput.init(device: currentDevice)
-            captureSession.addInput(currentDeviceInput)
+    
+    @IBAction func clickSwitchCameraButton(sender: UIButton){
+        guard let currentDeviceInput = self.currentDeviceInput else { return }
+        
+        captureSession.removeInput(currentDeviceInput)
+        switch currentDevice!.position {
+        case .back:
+            currentDevice = captureDevice(postion: .front, anyDevice: false)
+        case .front:
+            currentDevice = captureDevice(postion: .back, anyDevice: false)
+        case .unspecified:
+            assert(false)
         }
+        let input = try! AVCaptureDeviceInput(device: self.currentDevice!)
+        if captureSession.canAddInput(input) {
+            captureSession.addInput(input)
+            
+            self.currentDeviceInput = input
+        }
+        
+        let animation = CATransition()
+        animation.duration = 0.25
+        animation.subtype = kCATruncationMiddle
+        animation.type = kCATransitionFade
+        self.view.layer.add(animation, forKey: nil)
+        faceObject = nil
     }
     
     @IBAction func openCamera(sender: UIButton) {
         sender.isEnabled = false
         captureSession.startRunning()
         self.filterButtonsContainer.isHidden = false
+        
+        let captureDevices = AVCaptureDevice.devices(for: .video)
+        switchCameraButton.isHidden = captureDevices.count < 1
     }
     
     @IBAction func applyFilter(sender: UIButton) {
@@ -183,26 +191,37 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     }
     
     // MARK: - Video Records
+    
     @IBAction func record() {
-        if isWriting {
+        if self.isWriting {
             self.isWriting = false
-            assetWriterPixelBufferInput = nil
-            recordsButton.isEnabled = false
-            assetWriter?.finishWriting(completionHandler: {[unowned self] () -> Void in
-                print("录制完成")
-                self.recordsButton.setTitle("处理中...", for: .normal)
-                self.saveMovieToCameraRoll()
+            self.assetWriterPixelBufferInput = nil
+            self.recordsButton.isEnabled = false
+            self.assetWriter?.finishWriting(completionHandler: {[unowned self] () -> Void in
+                DispatchQueue.main.async {
+                    print("录制完成")
+                    self.recordsButton.setTitle("处理中...", for: .normal)
+                }
+                
+                self.saveMovieToCameraRoll() {
+                    DispatchQueue.main.async {
+                        self.recordsButton.isEnabled = true
+                        self.recordsButton.setTitle("开始录制", for: .normal)
+                        self.switchCameraButton.isEnabled = true
+                    }
+                }
             })
         } else {
-            createWriter()
-            recordsButton.setTitle("停止录制...", for: .normal)
-            assetWriter?.startWriting()
-            assetWriter?.startSession(atSourceTime: currentSampleTime!)
-            isWriting = true
+            self.createWriter()
+            self.recordsButton.setTitle("停止录制...", for: .normal)
+            self.assetWriter?.startWriting()
+            self.assetWriter?.startSession(atSourceTime: self.currentSampleTime!)
+            self.isWriting = true
+            self.switchCameraButton.isEnabled = false
         }
     }
     
-    func saveMovieToCameraRoll() {
+    func saveMovieToCameraRoll(_ finishBlock: @escaping () -> Void) {
         ALAssetsLibrary().writeVideoAtPath(toSavedPhotosAlbum: movieURL() as URL!) { (url, error) in
             if let errorDescription = error?.localizedDescription {
                 print("写入视频错误：\(errorDescription)")
@@ -211,10 +230,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
                 print("写入视频成功")
             }
             
-            DispatchQueue.main.async {
-                self.recordsButton.isEnabled = true
-                self.recordsButton.setTitle("开始录制", for: .normal)
-            }
+            finishBlock()
         }
     }
     
@@ -228,45 +244,45 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         let fm = FileManager.default
         let url = movieURL()
         let exist = fm.fileExists(atPath: url.path!)
-		
+        
         if exist {
-			print("删除之前的临时文件")
-			do {
+            print("删除之前的临时文件")
+            do {
                 try fm.removeItem(at: url as URL)
-			} catch let error as NSError {
-				print(error.localizedDescription)
-			}
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
         }
     }
     
     func createWriter() {
         self.checkForAndDeleteFile()
-		
-		do {
+        
+        do {
             assetWriter = try AVAssetWriter(outputURL: movieURL() as URL, fileType: AVFileType.mov)
-		} catch let error as NSError {
-			print("创建writer失败")
-			print(error.localizedDescription)
-			return
-		}
+        } catch let error as NSError {
+            print("创建writer失败")
+            print(error.localizedDescription)
+            return
+        }
 
         let outputSettings = [
             AVVideoCodecKey : AVVideoCodecH264,
             AVVideoWidthKey : Int(currentVideoDimensions!.width),
             AVVideoHeightKey : Int(currentVideoDimensions!.height)
             ] as [String : Any]
-		
+        
         let assetWriterVideoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: outputSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         assetWriterVideoInput.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2.0)
-		
-		let sourcePixelBufferAttributesDictionary = [
+        
+        let sourcePixelBufferAttributesDictionary = [
             String(kCVPixelBufferPixelFormatTypeKey) : Int(kCVPixelFormatType_32BGRA),
             String(kCVPixelBufferWidthKey) : Int(currentVideoDimensions!.width),
             String(kCVPixelBufferHeightKey) : Int(currentVideoDimensions!.height),
             String(kCVPixelFormatOpenGLESCompatibility) : kCFBooleanTrue
         ] as [String : Any]
-		
+        
         assetWriterPixelBufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
                                                 sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
         
@@ -354,7 +370,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             if self.isWriting {
                 if self.assetWriterPixelBufferInput?.assetWriterInput.isReadyForMoreMediaData == true {
                     var newPixelBuffer: CVPixelBuffer? = nil
-					
+                    
                     CVPixelBufferPoolCreatePixelBuffer(nil, self.assetWriterPixelBufferInput!.pixelBufferPool!, &newPixelBuffer)
                     
                     self.context.render(outputImage, to: newPixelBuffer!, bounds: outputImage.extent, colorSpace: nil)

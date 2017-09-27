@@ -100,34 +100,41 @@
                                     <action selector="record" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3YS-Qb-7ja"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vk9-X0-6E5">
-                                <rect key="frame" x="16" y="617" width="62" height="30"/>
-                                <state key="normal" title="打开相机">
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gap-fc-Utv">
+                                <rect key="frame" x="16" y="617" width="77" height="30"/>
+                                <state key="normal" title="打开摄像头"/>
                                 <connections>
-                                    <action selector="openCameraWithSender:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="YX0-rK-jHb"/>
+                                    <action selector="openCameraWithSender:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="lwS-E0-93w"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Afl-BC-WRc">
+                                <rect key="frame" x="282" y="28" width="77" height="30"/>
+                                <state key="normal" title="切换摄像头"/>
+                                <connections>
+                                    <action selector="clickSwitchCameraButtonWithSender:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="IZF-xC-b1m"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="f6I-f8-jkJ" firstAttribute="baseline" secondItem="2zl-oR-5ho" secondAttribute="baseline" id="6j7-JT-APS"/>
+                            <constraint firstItem="gap-fc-Utv" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="9DF-gk-0fQ"/>
                             <constraint firstItem="f6I-f8-jkJ" firstAttribute="top" secondItem="54x-c8-CZs" secondAttribute="bottom" constant="8" id="DFV-vh-mCz"/>
-                            <constraint firstItem="f6I-f8-jkJ" firstAttribute="centerY" secondItem="Vk9-X0-6E5" secondAttribute="centerY" id="JgU-r0-WOT"/>
+                            <constraint firstItem="l0M-o1-9l2" firstAttribute="top" secondItem="gap-fc-Utv" secondAttribute="bottom" constant="20" id="ISM-jN-KUC"/>
                             <constraint firstItem="f6I-f8-jkJ" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="PMI-YN-mLe"/>
                             <constraint firstAttribute="trailingMargin" secondItem="2zl-oR-5ho" secondAttribute="trailing" id="PTc-a6-qO4"/>
                             <constraint firstAttribute="trailing" secondItem="54x-c8-CZs" secondAttribute="trailing" id="THO-sF-QgK"/>
-                            <constraint firstItem="2zl-oR-5ho" firstAttribute="bottom" secondItem="Vk9-X0-6E5" secondAttribute="bottom" id="Ubc-fM-2HT"/>
-                            <constraint firstItem="l0M-o1-9l2" firstAttribute="top" secondItem="Vk9-X0-6E5" secondAttribute="bottom" constant="20" id="XcG-Bj-pJu"/>
-                            <constraint firstItem="Vk9-X0-6E5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="YpK-je-3bD"/>
+                            <constraint firstItem="Afl-BC-WRc" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="XEw-ai-jc7"/>
                             <constraint firstItem="2zl-oR-5ho" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="eSM-gC-4sn"/>
+                            <constraint firstItem="Afl-BC-WRc" firstAttribute="top" secondItem="fsR-a3-ZUO" secondAttribute="bottom" constant="8" id="gom-Jp-hFv"/>
+                            <constraint firstItem="gap-fc-Utv" firstAttribute="bottom" secondItem="2zl-oR-5ho" secondAttribute="bottom" id="wQl-3u-FU0"/>
                             <constraint firstItem="54x-c8-CZs" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="zxZ-J0-5ug"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="filterButtonsContainer" destination="54x-c8-CZs" id="2TL-xF-7L7"/>
                         <outlet property="recordsButton" destination="2zl-oR-5ho" id="bjl-7P-xIR"/>
-                        <outlet property="switchCameraButton" destination="JHU-C3-qju" id="N9d-FJ-ict"/>
+                        <outlet property="switchCameraButton" destination="Afl-BC-WRc" id="20c-Vg-xtt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
