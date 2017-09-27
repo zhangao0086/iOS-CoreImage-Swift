@@ -12,6 +12,7 @@ import AssetsLibrary
 
 class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDelegate , AVCaptureMetadataOutputObjectsDelegate {
     @IBOutlet var filterButtonsContainer: UIView!
+    @IBOutlet var switchCameraButton:UIButton!
     var captureSession: AVCaptureSession!
     var previewLayer: CALayer!
     var filter: CIFilter!
@@ -36,7 +37,8 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     var isWriting = false
     var currentSampleTime: CMTime?
     var currentVideoDimensions: CMVideoDimensions?
-    
+    var currentDeviceInput:AVCaptureDeviceInput?
+    var currentDevice:AVCaptureDevice?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,7 +106,50 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         
         captureSession.commitConfiguration()
     }
-
+    
+    func captureDevice(postion:AVCaptureDevicePosition = .Front,anyDevice:Bool = true) -> AVCaptureDevice{
+        let captureDevices  = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        var device = captureDevices.first as? AVCaptureDevice
+        
+        if anyDevice {
+            return device!
+        }
+        for  device_ in captureDevices {
+            if device_.position == postion{
+                device = device_ as? AVCaptureDevice
+                break
+            }
+        }
+        return device!;
+    }
+    
+    // MARK: 点击切换按钮切换镜头
+    @IBAction func clickSwitchCameraButton(sender:UIButton){
+        if let  deviceInput =  currentDeviceInput{
+            let animation = CATransition.init()
+            animation.duration = 0.25
+            animation.subtype = kCATruncationMiddle
+            animation.type =  kCATransitionFade
+            captureSession.removeInput(deviceInput)
+            switch currentDevice!.position {
+            case .Back:
+                currentDevice =  captureDevice(.Front,anyDevice: false)
+            case .Front:
+                currentDevice =  captureDevice(.Back,anyDevice: false)
+            case .Unspecified:
+                break
+            }
+            currentDeviceInput =  try! AVCaptureDeviceInput.init(device: currentDevice)
+            captureSession.addInput(currentDeviceInput)
+            self.view.layer .addAnimation(animation, forKey: nil)
+            faceObject = nil
+        }else{
+            currentDevice =  captureDevice()
+            currentDeviceInput =  try! AVCaptureDeviceInput.init(device: currentDevice)
+            captureSession.addInput(currentDeviceInput)
+        }
+    }
+    
     @IBAction func openCamera(sender: UIButton) {
         sender.isEnabled = false
         captureSession.startRunning()
@@ -373,6 +418,8 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
             print("###")
             print(faceLayer!.bounds)
             */
+        }else{
+            faceObject = nil
         }
     }
 }

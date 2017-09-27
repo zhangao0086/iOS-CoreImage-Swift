@@ -127,6 +127,7 @@
                     <connections>
                         <outlet property="filterButtonsContainer" destination="54x-c8-CZs" id="2TL-xF-7L7"/>
                         <outlet property="recordsButton" destination="2zl-oR-5ho" id="bjl-7P-xIR"/>
+                        <outlet property="switchCameraButton" destination="JHU-C3-qju" id="N9d-FJ-ict"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
